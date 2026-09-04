@@ -1,0 +1,17 @@
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\bin\Debug\net8.0\Infraestructure.deps.json
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\bin\Debug\net8.0\Infraestructure.dll
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\bin\Debug\net8.0\Infraestructure.pdb
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\bin\Debug\net8.0\Aplication.dll
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\bin\Debug\net8.0\Domain.dll
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\bin\Debug\net8.0\Aplication.pdb
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\bin\Debug\net8.0\Domain.pdb
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\Infraestructure.csproj.AssemblyReference.cache
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\Infraestructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\Infraestructure.AssemblyInfoInputs.cache
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\Infraestructure.AssemblyInfo.cs
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\Infraestructure.csproj.CoreCompileInputs.cache
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\Infraest.B0D41582.Up2Date
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\Infraestructure.dll
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\refint\Infraestructure.dll
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\Infraestructure.pdb
+C:\Users\alfon\source\repos\SubastaYa\Infrastructure\obj\Debug\net8.0\ref\Infraestructure.dll
