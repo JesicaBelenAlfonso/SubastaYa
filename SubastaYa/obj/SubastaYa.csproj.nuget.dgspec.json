@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alfon\\source\\repos\\SubastaYa\\SubastaYa\\SubastaYa.csproj": {}
+    "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\SubastaYa.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj": {
+    "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj",
-        "projectName": "Aplication",
-        "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj",
+        "projectUniqueName": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj",
+        "projectName": "SubastaYa.Application",
+        "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj",
         "packagesPath": "C:\\Users\\alfon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\obj\\",
+        "outputPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -33,8 +33,8 @@
             "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Domain\\Domain.csproj"
+              "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj": {
+                "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj"
               }
             }
           }
@@ -75,14 +75,14 @@
         }
       }
     },
-    "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Domain\\Domain.csproj": {
+    "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Domain\\Domain.csproj",
-        "projectName": "Domain",
-        "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj",
+        "projectName": "SubastaYa.Domain",
+        "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj",
         "packagesPath": "C:\\Users\\alfon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Domain\\obj\\",
+        "outputPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -142,14 +142,14 @@
         }
       }
     },
-    "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\Infrastructure.csproj": {
+    "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\Infrastructure.csproj",
-        "projectName": "Infrastructure",
-        "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj",
+        "projectName": "SubastaYa.Infrastructure",
+        "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\alfon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -171,8 +171,11 @@
             "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj": {
-                "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj"
+              "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj": {
+                "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj"
+              },
+              "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj": {
+                "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj"
               }
             }
           }
@@ -235,14 +238,14 @@
         }
       }
     },
-    "C:\\Users\\alfon\\source\\repos\\SubastaYa\\SubastaYa\\SubastaYa.csproj": {
+    "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\SubastaYa.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\SubastaYa\\SubastaYa.csproj",
+        "projectUniqueName": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\SubastaYa.csproj",
         "projectName": "SubastaYa",
-        "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\SubastaYa\\SubastaYa.csproj",
+        "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\SubastaYa.csproj",
         "packagesPath": "C:\\Users\\alfon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\SubastaYa\\obj\\",
+        "outputPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -264,8 +267,8 @@
             "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\Infrastructure.csproj"
+              "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj"
               }
             }
           }

@@ -112,3 +112,14 @@ C:\Users\alfon\source\repos\SubastaYa\SubastaYa\bin\Debug\net8.0\zh-Hans\Microso
 C:\Users\alfon\source\repos\SubastaYa\SubastaYa\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\alfon\source\repos\SubastaYa\SubastaYa\bin\Debug\net8.0\Infrastructure.dll
 C:\Users\alfon\source\repos\SubastaYa\SubastaYa\bin\Debug\net8.0\Infrastructure.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.csproj.AssemblyReference.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.AssemblyInfoInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.AssemblyInfo.cs
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.csproj.CoreCompileInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.sourcelink.json
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\refint\SubastaYa.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\SubastaYa\obj\Debug\net8.0\SubastaYa.pdb

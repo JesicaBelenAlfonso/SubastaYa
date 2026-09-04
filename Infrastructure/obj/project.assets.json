@@ -876,27 +876,27 @@
           "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
-      "Aplication/1.0.0": {
+      "SubastaYa.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "Domain": "1.0.0"
+          "SubastaYa.Domain": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/Aplication.dll": {}
+          "bin/placeholder/SubastaYa.Application.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Aplication.dll": {}
+          "bin/placeholder/SubastaYa.Application.dll": {}
         }
       },
-      "Domain/1.0.0": {
+      "SubastaYa.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "compile": {
-          "bin/placeholder/Domain.dll": {}
+          "bin/placeholder/SubastaYa.Domain.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Domain.dll": {}
+          "bin/placeholder/SubastaYa.Domain.dll": {}
         }
       }
     }
@@ -2309,24 +2309,25 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Aplication/1.0.0": {
+    "SubastaYa.Application/1.0.0": {
       "type": "project",
-      "path": "../Aplication/Aplication.csproj",
-      "msbuildProject": "../Aplication/Aplication.csproj"
+      "path": "../Aplication/SubastaYa.Application.csproj",
+      "msbuildProject": "../Aplication/SubastaYa.Application.csproj"
     },
-    "Domain/1.0.0": {
+    "SubastaYa.Domain/1.0.0": {
       "type": "project",
-      "path": "../Domain/Domain.csproj",
-      "msbuildProject": "../Domain/Domain.csproj"
+      "path": "../Domain/SubastaYa.Domain.csproj",
+      "msbuildProject": "../Domain/SubastaYa.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Aplication >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 8.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.0",
-      "Npgsql.EntityFrameworkCore.PostgreSQL >= 8.0.0"
+      "Npgsql.EntityFrameworkCore.PostgreSQL >= 8.0.0",
+      "SubastaYa.Application >= 1.0.0",
+      "SubastaYa.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -2336,11 +2337,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\Infrastructure.csproj",
-      "projectName": "Infrastructure",
-      "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj",
+      "projectName": "SubastaYa.Infrastructure",
+      "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\alfon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2362,8 +2363,11 @@
           "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj": {
-              "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj"
+            "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj": {
+              "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj"
+            },
+            "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj": {
+              "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj"
             }
           }
         }

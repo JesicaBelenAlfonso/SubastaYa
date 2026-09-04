@@ -1,0 +1,12 @@
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\bin\Debug\net8.0\SubastaYa.Domain.deps.json
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\bin\Debug\net8.0\SubastaYa.Domain.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\bin\Debug\net8.0\SubastaYa.Domain.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\SubastaYa.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\SubastaYa.Domain.AssemblyInfoInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\SubastaYa.Domain.AssemblyInfo.cs
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\SubastaYa.Domain.csproj.CoreCompileInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\SubastaYa.Domain.sourcelink.json
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\SubastaYa.Domain.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\refint\SubastaYa.Domain.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\SubastaYa.Domain.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Domain\obj\Debug\net8.0\ref\SubastaYa.Domain.dll

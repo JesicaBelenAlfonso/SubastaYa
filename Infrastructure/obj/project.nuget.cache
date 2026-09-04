@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "++xZ/8eVRpc=",
+  "dgSpecHash": "VK6mni1OOrg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Infrastructure\\Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\alfon\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\alfon\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",

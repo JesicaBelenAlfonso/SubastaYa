@@ -1,0 +1,6 @@
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.AssemblyInfo.cs
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.sourcelink.json

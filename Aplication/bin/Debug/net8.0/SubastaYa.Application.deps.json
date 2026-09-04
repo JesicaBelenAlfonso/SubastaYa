@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "SubastaYa.Application/1.0.0": {
+        "dependencies": {
+          "SubastaYa.Domain": "1.0.0"
+        },
+        "runtime": {
+          "SubastaYa.Application.dll": {}
+        }
+      },
+      "SubastaYa.Domain/1.0.0": {
+        "runtime": {
+          "SubastaYa.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SubastaYa.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SubastaYa.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

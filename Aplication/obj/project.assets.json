@@ -2,28 +2,28 @@
   "version": 4,
   "targets": {
     "net8.0": {
-      "Domain/1.0.0": {
+      "SubastaYa.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "compile": {
-          "bin/placeholder/Domain.dll": {}
+          "bin/placeholder/SubastaYa.Domain.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Domain.dll": {}
+          "bin/placeholder/SubastaYa.Domain.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Domain/1.0.0": {
+    "SubastaYa.Domain/1.0.0": {
       "type": "project",
-      "path": "../Domain/Domain.csproj",
-      "msbuildProject": "../Domain/Domain.csproj"
+      "path": "../Domain/SubastaYa.Domain.csproj",
+      "msbuildProject": "../Domain/SubastaYa.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Domain >= 1.0.0"
+      "SubastaYa.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -33,11 +33,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj",
-      "projectName": "Aplication",
-      "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\Aplication.csproj",
+      "projectUniqueName": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj",
+      "projectName": "SubastaYa.Application",
+      "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\SubastaYa.Application.csproj",
       "packagesPath": "C:\\Users\\alfon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Aplication\\obj\\",
+      "outputPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -59,8 +59,8 @@
           "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\alfon\\source\\repos\\SubastaYa\\Domain\\Domain.csproj"
+            "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj": {
+              "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\SubastaYa.Domain.csproj"
             }
           }
         }

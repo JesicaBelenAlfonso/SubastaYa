@@ -1,0 +1,16 @@
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\sAplication.deps.json
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\sAplication.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\sAplication.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\Domain.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\Domain.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplication.csproj.AssemblyReference.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplication.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplication.AssemblyInfoInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplication.AssemblyInfo.cs
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplication.csproj.CoreCompileInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplication.sourcelink.json
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplicat.EF68159E.Up2Date
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplication.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\refint\sAplication.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\sAplication.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\ref\sAplication.dll

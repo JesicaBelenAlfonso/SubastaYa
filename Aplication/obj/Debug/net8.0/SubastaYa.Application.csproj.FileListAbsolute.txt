@@ -1,0 +1,16 @@
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\SubastaYa.Application.deps.json
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\SubastaYa.Application.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\SubastaYa.Application.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaYa.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaYa.Application.AssemblyInfoInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaYa.Application.AssemblyInfo.cs
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaYa.Application.csproj.CoreCompileInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaYa.Application.sourcelink.json
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaYa.Application.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\refint\SubastaYa.Application.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaYa.Application.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\ref\SubastaYa.Application.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\SubastaYa.Domain.dll
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\bin\Debug\net8.0\SubastaYa.Domain.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaYa.Application.csproj.AssemblyReference.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Aplication\obj\Debug\net8.0\SubastaY.1EE9BD8A.Up2Date
