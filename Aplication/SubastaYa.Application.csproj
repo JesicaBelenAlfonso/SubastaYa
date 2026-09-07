@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Domain\SubastaYa.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Wallets\Commands\" />
+  </ItemGroup>
+
 </Project>

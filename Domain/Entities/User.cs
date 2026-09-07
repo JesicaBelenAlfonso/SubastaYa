@@ -12,7 +12,7 @@ namespace Domain.Entities
         public string Email { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
-        public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
+        public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
 
         public User() { }
     }
