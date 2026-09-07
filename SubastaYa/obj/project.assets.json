@@ -4566,23 +4566,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alfon\\.nuget\\packages\\": {},
+    "C:\\Users\\milen\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\SubastaYa.csproj",
+      "projectUniqueName": "C:\\Users\\milen\\OneDrive\\Escritorio\\SubastaYa\\SubastaYa\\SubastaYa\\SubastaYa.csproj",
       "projectName": "SubastaYa",
-      "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\SubastaYa.csproj",
-      "packagesPath": "C:\\Users\\alfon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\obj\\",
+      "projectPath": "C:\\Users\\milen\\OneDrive\\Escritorio\\SubastaYa\\SubastaYa\\SubastaYa\\SubastaYa.csproj",
+      "packagesPath": "C:\\Users\\milen\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\milen\\OneDrive\\Escritorio\\SubastaYa\\SubastaYa\\SubastaYa\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\alfon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\milen\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4598,8 +4598,8 @@
           "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj"
+            "C:\\Users\\milen\\OneDrive\\Escritorio\\SubastaYa\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\milen\\OneDrive\\Escritorio\\SubastaYa\\SubastaYa\\Infrastructure\\SubastaYa.Infrastructure.csproj"
             }
           }
         }
@@ -4614,7 +4614,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.400"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -4669,7 +4669,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

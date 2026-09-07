@@ -16,6 +16,9 @@ namespace Infraestructure.Persistence
 
         public DbSet<User> Users => Set<User>();
         public DbSet<Wallet> Wallets => Set<Wallet>();
-
+        public DbSet<Auction> Auctions => Set<Auction>();
+        public DbSet<Audit> Auditions => Set<Audit>();
+        public DbSet<Bid> Bids => Set<Bid>();
+        public DbSet<Category> Categories => Set<Category>();
     }
 }

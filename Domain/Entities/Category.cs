@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Categoria
+    public class Category
     {
         public int id { get; set; }
-        public string nombre { get; set; }
+        public string Name { get; set; }
         public string UrlIcono { get; set; }
 
-        public Categoria() { }
+        public Category() { }
 
     }
 }

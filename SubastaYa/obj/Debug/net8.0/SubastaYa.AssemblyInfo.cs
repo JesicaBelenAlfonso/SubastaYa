@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SubastaYa")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+07d27626e76690b8fcaa3dd0c44d0577e6695ada")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8319f062f62652b631a343338278e0c55f1c249c")]
 [assembly: System.Reflection.AssemblyProductAttribute("SubastaYa")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SubastaYa")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
