@@ -1,8 +1,24 @@
 [
   {
+    "ContainingType": "SubastaYa.Api.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/v1/auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cmd",
+        "Type": "SubastaYa.Application.UseCases.Auth.Commands.LoginCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SubastaYa.Api.Controllers.UsersController",
     "Method": "Register",
-    "RelativePath": "api/users",
+    "RelativePath": "api/v1/users",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -18,7 +34,7 @@
   {
     "ContainingType": "SubastaYa.Api.Controllers.UsersController",
     "Method": "GetById",
-    "RelativePath": "api/users/{id}",
+    "RelativePath": "api/v1/users/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -34,7 +50,7 @@
   {
     "ContainingType": "SubastaYa.Api.Controllers.UsersController",
     "Method": "Update",
-    "RelativePath": "api/users/{id}",
+    "RelativePath": "api/v1/users/{id}",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
@@ -55,7 +71,7 @@
   {
     "ContainingType": "SubastaYa.Api.Controllers.UsersController",
     "Method": "Delete",
-    "RelativePath": "api/users/{id}",
+    "RelativePath": "api/v1/users/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -71,7 +87,7 @@
   {
     "ContainingType": "SubastaYa.Api.Controllers.WalletsController",
     "Method": "Get",
-    "RelativePath": "api/users/{userId}/wallet",
+    "RelativePath": "api/v1/users/{userId}/wallet",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -79,6 +95,59 @@
       {
         "Name": "userId",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SubastaYa.Api.Controllers.WalletsController",
+    "Method": "Delete",
+    "RelativePath": "api/v1/users/{userId}/wallet",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SubastaYa.Api.Controllers.TransactionsController",
+    "Method": "Get",
+    "RelativePath": "api/v1/users/{userId}/wallet/transactions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SubastaYa.Api.Controllers.TransactionsController",
+    "Method": "Create",
+    "RelativePath": "api/v1/users/{userId}/wallet/transactions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "cmd",
+        "Type": "SubastaYa.Application.UseCases.Transactions.Commands.CreateTransactionCommand",
         "IsRequired": true
       }
     ],

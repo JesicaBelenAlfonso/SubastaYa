@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SubastaYa.Application.UseCases.Wallets.Queries
+﻿namespace SubastaYa.Application.UseCases.Wallets.Queries
 {
-    public record GetWalletByUserIdQuery(int UserId);
+    public class GetWalletByUserIdQuery
+    {
+        public int UserId { get; set; }
+
+        public GetWalletByUserIdQuery() { }
+
+        public GetWalletByUserIdQuery(int userId)
+        {
+            UserId = userId;
+        }
+    }
 }

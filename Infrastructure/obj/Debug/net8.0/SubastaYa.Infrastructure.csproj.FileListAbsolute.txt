@@ -1,9 +1,3 @@
-C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.csproj.AssemblyReference.cache
-C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.AssemblyInfoInputs.cache
-C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.AssemblyInfo.cs
-C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.csproj.CoreCompileInputs.cache
-C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.sourcelink.json
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\bin\Debug\net8.0\SubastaYa.Infrastructure.deps.json
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\bin\Debug\net8.0\SubastaYa.Infrastructure.runtimeconfig.json
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\bin\Debug\net8.0\SubastaYa.Infrastructure.dll
@@ -12,6 +6,12 @@ C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\bin\Debug\net8.0
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\bin\Debug\net8.0\SubastaYa.Domain.dll
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\bin\Debug\net8.0\SubastaYa.Application.pdb
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\bin\Debug\net8.0\SubastaYa.Domain.pdb
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.AssemblyInfo.cs
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.sourcelink.json
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaY.1421E293.Up2Date
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\SubastaYa.Infrastructure.dll
 C:\Users\alfon\Documents\GitHub\GitHub\SubastaYa\Infrastructure\obj\Debug\net8.0\refint\SubastaYa.Infrastructure.dll

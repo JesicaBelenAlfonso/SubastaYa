@@ -26,5 +26,10 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
         {
             return await _ctx.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
         }
+
+        public void Delete(Wallet wallet)
+        {
+            _ctx.Wallets.Remove(wallet);
+        }
     }
 }

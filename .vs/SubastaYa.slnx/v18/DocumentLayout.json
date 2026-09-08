@@ -3,36 +3,48 @@
   "WorkspaceRootPath": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{15136BB6-19CD-AF53-1D7B-194CFD2C2ACB}|Domain\\SubastaYa.Domain.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\domain\\entities\\wallet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{15136BB6-19CD-AF53-1D7B-194CFD2C2ACB}|Domain\\SubastaYa.Domain.csproj|solutionrelative:domain\\entities\\wallet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\subastaya\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|solutionrelative:subastaya\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\aplication\\dtos\\walletresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|solutionrelative:aplication\\dtos\\walletresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\subastaya\\controllers\\transactionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|solutionrelative:subastaya\\controllers\\transactionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\subastaya\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|solutionrelative:subastaya\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\subastaya\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|solutionrelative:subastaya\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\subastaya\\controllers\\walletscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|solutionrelative:subastaya\\controllers\\walletscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\aplication\\usecases\\auth\\handlers\\logincommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|solutionrelative:aplication\\usecases\\auth\\handlers\\logincommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\aplication\\usecases\\auth\\commands\\logincommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|solutionrelative:aplication\\usecases\\auth\\commands\\logincommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{64039D0A-01C3-CF52-8E9A-6153783E5B1E}|Infrastructure\\SubastaYa.Infrastructure.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\infrastructure\\segurity\\passwordhasher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{64039D0A-01C3-CF52-8E9A-6153783E5B1E}|Infrastructure\\SubastaYa.Infrastructure.csproj|solutionrelative:infrastructure\\segurity\\passwordhasher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\subastaya\\middleware\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|solutionrelative:subastaya\\middleware\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\subastaya\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|solutionrelative:subastaya\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\subastaya\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{02BE25B9-B93A-578A-87F6-79E0D89B1565}|SubastaYa\\SubastaYa.csproj|solutionrelative:subastaya\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\aplication\\usecases\\wallets\\queries\\getwalletbyuseridquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|solutionrelative:aplication\\usecases\\wallets\\queries\\getwalletbyuseridquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\aplication\\usecases\\users\\handlers\\updateusercommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|solutionrelative:aplication\\usecases\\users\\handlers\\updateusercommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\aplication\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|solutionrelative:aplication\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\aplication\\usecases\\users\\commands\\updateusercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|solutionrelative:aplication\\usecases\\users\\commands\\updateusercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|c:\\users\\alfon\\documents\\github\\github\\subastaya\\aplication\\dtos\\transactionresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36C446BE-8BD0-A265-C6A1-19A747A21D86}|Aplication\\SubastaYa.Application.csproj|solutionrelative:aplication\\dtos\\transactionresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,104 +54,140 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Wallet.cs",
-              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\Entities\\Wallet.cs",
-              "RelativeDocumentMoniker": "Domain\\Entities\\Wallet.cs",
-              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Domain\\Entities\\Wallet.cs",
-              "RelativeToolTip": "Domain\\Entities\\Wallet.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-06T19:31:01.077Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "WalletResponseDto.cs",
-              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\DTOs\\WalletResponseDto.cs",
-              "RelativeDocumentMoniker": "Aplication\\DTOs\\WalletResponseDto.cs",
-              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\DTOs\\WalletResponseDto.cs",
-              "RelativeToolTip": "Aplication\\DTOs\\WalletResponseDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-06T19:29:57.518Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\appsettings.json",
-              "RelativeDocumentMoniker": "SubastaYa\\appsettings.json",
-              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\appsettings.json",
-              "RelativeToolTip": "SubastaYa\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-09-06T19:18:11.863Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Program.cs",
-              "RelativeDocumentMoniker": "SubastaYa\\Program.cs",
-              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Program.cs",
-              "RelativeToolTip": "SubastaYa\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAfAAAAAAAAAA==",
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "SubastaYa\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "SubastaYa\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-06T19:07:09.193Z"
+              "WhenOpened": "2026-09-08T01:53:19.257Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "SubastaYa\\Controllers\\UsersController.cs",
               "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Controllers\\UsersController.cs",
               "RelativeToolTip": "SubastaYa\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAmwEIAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAqwCUAAABVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-06T19:05:59.094Z"
+              "WhenOpened": "2026-09-08T01:52:51.594Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "UpdateUserCommandHandler.cs",
-              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Users\\Handlers\\UpdateUserCommandHandler.cs",
-              "RelativeDocumentMoniker": "Aplication\\UseCases\\Users\\Handlers\\UpdateUserCommandHandler.cs",
-              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Users\\Handlers\\UpdateUserCommandHandler.cs",
-              "RelativeToolTip": "Aplication\\UseCases\\Users\\Handlers\\UpdateUserCommandHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAwAAAAAAAAAA==",
+              "Title": "LoginCommand.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Auth\\Commands\\LoginCommand.cs",
+              "RelativeDocumentMoniker": "Aplication\\UseCases\\Auth\\Commands\\LoginCommand.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Auth\\Commands\\LoginCommand.cs",
+              "RelativeToolTip": "Aplication\\UseCases\\Auth\\Commands\\LoginCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-06T19:04:51.928Z"
+              "WhenOpened": "2026-09-08T01:52:41.065Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LoginCommandHandler.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Auth\\Handlers\\LoginCommandHandler.cs",
+              "RelativeDocumentMoniker": "Aplication\\UseCases\\Auth\\Handlers\\LoginCommandHandler.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Auth\\Handlers\\LoginCommandHandler.cs",
+              "RelativeToolTip": "Aplication\\UseCases\\Auth\\Handlers\\LoginCommandHandler.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAcwAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T01:52:27.074Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "IUserRepository.cs",
-              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\Interfaces\\IUserRepository.cs",
-              "RelativeDocumentMoniker": "Aplication\\Interfaces\\IUserRepository.cs",
-              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\Interfaces\\IUserRepository.cs",
-              "RelativeToolTip": "Aplication\\Interfaces\\IUserRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAaAAAAAAAAAA==",
+              "Title": "PasswordHasher.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\Segurity\\PasswordHasher.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Segurity\\PasswordHasher.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Infrastructure\\Segurity\\PasswordHasher.cs",
+              "RelativeToolTip": "Infrastructure\\Segurity\\PasswordHasher.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-06T19:04:24.909Z"
+              "WhenOpened": "2026-09-08T01:52:18.197Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "UpdateUserCommand.cs",
-              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Users\\Commands\\UpdateUserCommand.cs",
-              "RelativeDocumentMoniker": "Aplication\\UseCases\\Users\\Commands\\UpdateUserCommand.cs",
-              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Users\\Commands\\UpdateUserCommand.cs",
-              "RelativeToolTip": "Aplication\\UseCases\\Users\\Commands\\UpdateUserCommand.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Title": "ExceptionMiddleware.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Middleware\\ExceptionMiddleware.cs",
+              "RelativeDocumentMoniker": "SubastaYa\\Middleware\\ExceptionMiddleware.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Middleware\\ExceptionMiddleware.cs",
+              "RelativeToolTip": "SubastaYa\\Middleware\\ExceptionMiddleware.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-06T19:03:38.775Z"
+              "WhenOpened": "2026-09-08T01:41:00.155Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WalletsController.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Controllers\\WalletsController.cs",
+              "RelativeDocumentMoniker": "SubastaYa\\Controllers\\WalletsController.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Controllers\\WalletsController.cs",
+              "RelativeToolTip": "SubastaYa\\Controllers\\WalletsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T01:02:01.184Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "GetWalletByUserIdQuery.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Wallets\\Queries\\GetWalletByUserIdQuery.cs",
+              "RelativeDocumentMoniker": "Aplication\\UseCases\\Wallets\\Queries\\GetWalletByUserIdQuery.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\UseCases\\Wallets\\Queries\\GetWalletByUserIdQuery.cs",
+              "RelativeToolTip": "Aplication\\UseCases\\Wallets\\Queries\\GetWalletByUserIdQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T01:00:06.616Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TransactionsController.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Controllers\\TransactionsController.cs",
+              "RelativeDocumentMoniker": "SubastaYa\\Controllers\\TransactionsController.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Controllers\\TransactionsController.cs",
+              "RelativeToolTip": "SubastaYa\\Controllers\\TransactionsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T00:59:33.672Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Program.cs",
+              "RelativeDocumentMoniker": "SubastaYa\\Program.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\SubastaYa\\Program.cs",
+              "RelativeToolTip": "SubastaYa\\Program.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T00:59:25.411Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "TransactionResponseDto.cs",
+              "DocumentMoniker": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\DTOs\\TransactionResponseDto.cs",
+              "RelativeDocumentMoniker": "Aplication\\DTOs\\TransactionResponseDto.cs",
+              "ToolTip": "C:\\Users\\alfon\\Documents\\GitHub\\GitHub\\SubastaYa\\Aplication\\DTOs\\TransactionResponseDto.cs",
+              "RelativeToolTip": "Aplication\\DTOs\\TransactionResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-08T00:58:47.29Z"
             }
           ]
         }
