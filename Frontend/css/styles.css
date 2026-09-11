@@ -249,3 +249,58 @@ body {
 .skeleton-card {
   border-radius: 0.9rem;
 }
+
+/* ===== Billetera ===== */
+.titulo-seccion {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+}
+
+.card-saldo {
+  border: 0;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  box-shadow: 0 0.25rem 1rem rgba(43, 43, 43, 0.06);
+}
+.card-saldo::before {
+  content: "";
+  display: block;
+  height: 0.4rem;
+}
+.card-saldo-disponible::before {
+  background-color: var(--verde);
+}
+.card-saldo-congelado::before {
+  background-color: var(--acento);
+}
+.card-saldo-total::before {
+  background-color: var(--tinta);
+}
+.saldo-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  color: var(--gris);
+  margin-bottom: 0.4rem;
+}
+.saldo-valor {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--tinta);
+  margin-bottom: 0.5rem;
+}
+.saldo-nota {
+  font-size: 0.8rem;
+  color: var(--gris);
+}
+
+.panel-billetera {
+  border: 0;
+  border-radius: 0.9rem;
+  box-shadow: 0 0.25rem 1rem rgba(43, 43, 43, 0.06);
+}
+.titulo-panel {
+  color: var(--verde-oscuro);
+  font-weight: 600;
+}

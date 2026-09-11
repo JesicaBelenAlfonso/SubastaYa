@@ -92,6 +92,8 @@ const MOCK_AUCTIONS = [
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("grid-subastas")) initCatalogo();
   if (document.getElementById("form-login")) initLogin();
+  if (document.getElementById("billetera-app")) initBilletera();
+  if (document.getElementById("estado-api")) verificarAPI();
   actualizarNav();
 });
 
@@ -119,6 +121,7 @@ function actualizarNav() {
   const sesion = getSession();
   if (sesion) {
     accion.innerHTML = `
+      <a class="btn btn-outline-light btn-sm me-2" href="billetera.html"><i class="bi bi-wallet2 me-1"></i>Mi billetera</a>
       <span class="text-light me-2"><i class="bi bi-person-circle"></i> ${sesion.name}</span>
       <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">Cerrar sesión</button>`;
   } else {
@@ -288,6 +291,34 @@ async function initCatalogo() {
   });
 }
 
+function mensajeDeError(err) {
+  if (
+    err instanceof TypeError ||
+    /failed to fetch|networkerror|load failed|fetch/i.test(err.message ?? "")
+  ) {
+    return "No se pudo conectar con el servidor. Revisá que la API esté corriendo (dotnet run --project SubastaYa) en http://localhost:5253";
+  }
+  return err.message || "Ocurrió un error inesperado.";
+}
+
+async function verificarAPI() {
+  const el = document.getElementById("estado-api");
+  if (!el) return;
+  const ctrl = new AbortController();
+  const tiempo = setTimeout(() => ctrl.abort(), 4000);
+  try {
+    const res = await fetch(`${API_BASE}/users/1/wallet`, { signal: ctrl.signal });
+    el.innerHTML = `<i class="bi bi-check-circle me-1"></i>Servidor conectado (HTTP ${res.status})`;
+    el.className = "text-center small fw-semibold text-success";
+  } catch {
+    el.innerHTML =
+      '<i class="bi bi-x-circle me-1"></i>Sin conexión con el servidor. ¿Está corriendo la API?';
+    el.className = "text-center small fw-semibold text-danger";
+  } finally {
+    clearTimeout(tiempo);
+  }
+}
+
 /* ============ Login ============ */
 function initLogin() {
   const form = document.getElementById("form-login");
@@ -303,6 +334,7 @@ function initLogin() {
     }
 
     const btns = document.getElementById("btn-ingresar");
+    const btnOriginal = btns.innerHTML;
     btns.disabled = true;
     btns.innerHTML =
       '<span class="spinner-border spinner-border-sm me-2"></span>Ingresando...';
@@ -326,11 +358,155 @@ function initLogin() {
       setSession({ userId: user.id, name: user.name, email: user.email });
       location.href = "index.html";
     } catch (err) {
-      alerta.textContent = err.message;
+      alerta.textContent = mensajeDeError(err);
       alerta.classList.remove("d-none");
     } finally {
       btns.disabled = false;
-      btns.innerHTML = "Ingresar";
+      btns.innerHTML = btnOriginal;
     }
   });
+}
+
+/* ============ Billetera ============ */
+const AYUDA_MOVIMIENTO = {
+  DEPOSITO: "Suma dinero a tu saldo disponible (recarga).",
+  RETIRO: "Retira dinero de tu saldo disponible.",
+  RETENCION: "Congela dinero para garantizar una oferta.",
+  LIBERACION: "Devuelve dinero congelado a tu saldo disponible.",
+};
+
+const INFO_MOVIMIENTO = {
+  DEPOSITO: { texto: "Depósito", clase: "bg-success" },
+  RETIRO: { texto: "Retiro", clase: "bg-danger" },
+  RETENCION: { texto: "Retención", clase: "bg-secondary" },
+  LIBERACION: { texto: "Liberación", clase: "bg-warning text-dark" },
+};
+
+async function initBilletera() {
+  const sesion = getSession();
+  if (!sesion) {
+    location.href = "acceder.html";
+    return;
+  }
+  window.__walletUserId = sesion.userId;
+  const nombre = document.getElementById("lbl-usuario");
+  if (nombre) nombre.textContent = sesion.name;
+
+  const tipo = document.getElementById("mov-tipo");
+  if (tipo) {
+    tipo.addEventListener("change", mostrarAyudaMovimiento);
+    mostrarAyudaMovimiento();
+    document.getElementById("form-movimiento").addEventListener("submit", (event) => {
+      event.preventDefault();
+      hacerMovimiento();
+    });
+  }
+
+  await cargarBilletera();
+  await cargarMovimientos();
+}
+
+async function cargarBilletera() {
+  document.getElementById("loader-billetera").classList.remove("d-none");
+  document.getElementById("billetera-cards").classList.add("d-none");
+  try {
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet`);
+    if (!res.ok) throw new Error("No se pudo obtener tu billetera.");
+    const b = await res.json();
+    document.getElementById("tot-disponible").textContent = formatearPrecio(b.availableBalance);
+    document.getElementById("tot-congelado").textContent = formatearPrecio(b.heldBalance);
+    document.getElementById("tot-total").textContent = formatearPrecio(b.totalBalance);
+  } catch (err) {
+    mostrarMensaje(mensajeDeError(err), true);
+  } finally {
+    document.getElementById("loader-billetera").classList.add("d-none");
+    document.getElementById("billetera-cards").classList.remove("d-none");
+  }
+}
+
+async function cargarMovimientos() {
+  const tbody = document.getElementById("tabla-movimientos");
+  const vacio = document.getElementById("sin-movimientos");
+  const loader = document.getElementById("loader-movimientos");
+  tbody.innerHTML = "";
+  loader.classList.remove("d-none");
+  try {
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet/transactions`);
+    if (!res.ok) throw new Error("No se pudieron obtener los movimientos.");
+    const lista = await res.json();
+    vacio.classList.toggle("d-none", lista.length > 0);
+    tbody.innerHTML = lista.map(filaMovimiento).join("");
+  } catch (err) {
+    mostrarMensaje(mensajeDeError(err), true);
+  } finally {
+    loader.classList.add("d-none");
+  }
+}
+
+function filaMovimiento(t) {
+  const info = INFO_MOVIMIENTO[t.type] ?? { texto: t.type ?? "—", clase: "bg-secondary" };
+  const esEntrada = t.type === "DEPOSITO" || t.type === "LIBERACION";
+  const fecha = new Date(t.date).toLocaleString("es-AR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `
+    <tr>
+      <td><span class="badge ${info.clase}">${info.texto}</span></td>
+      <td class="${esEntrada ? "text-success fw-semibold" : "text-danger fw-semibold"}">${esEntrada ? "+" : "−"}${formatearPrecio(t.amount)}</td>
+      <td class="text-muted small">${fecha}</td>
+      <td class="text-muted small">${t.auctionId ? `Subasta #${t.auctionId}` : "—"}</td>
+    </tr>`;
+}
+
+async function hacerMovimiento() {
+  const tipo = document.getElementById("mov-tipo").value;
+  const montoEl = document.getElementById("mov-monto");
+  const monto = Number(montoEl.value);
+  const btn = document.getElementById("btn-movimiento");
+
+  if (!tipo) return mostrarMensaje("Elegí un tipo de movimiento.", true);
+  if (!monto || monto <= 0) return mostrarMensaje("Ingresá un monto mayor a 0.", true);
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
+  try {
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet/transactions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: tipo, amount: monto, auctionId: null }),
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error ?? "No se pudo realizar el movimiento.");
+    }
+    montoEl.value = "";
+    mostrarMensaje(`Movimiento realizado con éxito.`, false);
+    await cargarBilletera();
+    await cargarMovimientos();
+  } catch (err) {
+    mostrarMensaje(mensajeDeError(err), true);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Ejecutar movimiento';
+  }
+}
+
+function mostrarAyudaMovimiento() {
+  const tipo = document.getElementById("mov-tipo");
+  const ayuda = document.getElementById("ayuda-movimiento");
+  if (ayuda) ayuda.textContent = AYUDA_MOVIMIENTO[tipo.value] ?? "";
+}
+
+function mostrarMensaje(texto, esError) {
+  const alerta = document.getElementById("alerta-billetera");
+  if (!alerta) return;
+  alerta.textContent = texto;
+  alerta.className = `alert mt-4 ${esError ? "alert-danger" : "alert-success"}`;
+  alerta.classList.remove("d-none");
+  clearTimeout(window.__timerMsg);
+  window.__timerMsg = setTimeout(() => alerta.classList.add("d-none"), 6000);
 }

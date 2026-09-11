@@ -28,5 +28,10 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
                 .OrderByDescending(t => t.Date)
                 .ToListAsync();
         }
+
+        public async Task<bool> ExistsByWalletIdAsync(int walletId)
+        {
+            return await _ctx.Transactions.AnyAsync(t => t.WalletId == walletId);
+        }
     }
 }

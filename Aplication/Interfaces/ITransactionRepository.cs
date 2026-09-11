@@ -6,5 +6,6 @@ namespace SubastaYa.Application.Interfaces
     {
         Task AddAsync(Transaction transaction);
         Task<IEnumerable<Transaction>> GetByWalletIdAsync(int walletId);
+        Task<bool> ExistsByWalletIdAsync(int walletId);
     }
 }
