@@ -8,7 +8,7 @@ using SubastaYa.Application.UseCases.Users.Queries;
 namespace SubastaYa.Api.Controllers
 {
     [ApiController]
-    [Route("api/users")]
+    [Route("api/v1/users")]
     public class UsersController : ControllerBase
     {
         // El controller no conoce IUserRepository, ni AppDbContext, ni EF Core.

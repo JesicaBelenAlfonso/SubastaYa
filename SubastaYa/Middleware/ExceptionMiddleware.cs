@@ -17,6 +17,11 @@ public class ExceptionMiddleware
         {
             await _next(ctx);   // ← acá "adentro" pasa TODO: routing, controller, handler...
         }
+        catch (InvalidCredentialsException ex)              // credenciales inválidas → 401
+        {
+            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await ctx.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
         catch (DomainException ex)              // agarra la excepción de negocio
         {
             ctx.Response.StatusCode = StatusCodes.Status400BadRequest;

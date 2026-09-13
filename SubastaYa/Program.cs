@@ -1,13 +1,15 @@
-
 using Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SubastaYa.Application.Interfaces;
+using SubastaYa.Application.UseCases.Auth.Handlers;
+using SubastaYa.Application.UseCases.Transactions.Handlers;
 using SubastaYa.Application.UseCases.Users.Handlers;
+using SubastaYa.Application.UseCases.Wallets.Handlers;
 using SubastaYa.Infrastructure.Persistence;
 using SubastaYa.Infrastructure.Persistence.Repositories;
 using SubastaYa.Infrastructure.Segurity;
-using SubastaYa.Application.UseCases.Wallets.Handlers;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// CORS: en desarrollo se permite cualquier origen (Live Server usa puertos variables).
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendDev", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
 
 // inyectamos 
 // Add services to the container.
@@ -30,8 +41,12 @@ builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<GetUserByIdQueryHandler>();
 builder.Services.AddScoped<DeleteUserCommandHandler>();
 builder.Services.AddScoped<UpdateUserCommandHandler>();
-
-
+builder.Services.AddScoped<GetWalletByUserIdQueryHandler>();
+builder.Services.AddScoped<DeleteWalletCommandHandler>();
+builder.Services.AddScoped<ITransactionRepository,TransactionRepository>();
+builder.Services.AddScoped<GetWalletTransactionsQueryHandler>();
+builder.Services.AddScoped<CreateTransactionCommandHandler>();
+builder.Services.AddScoped<LoginCommandHandler>();
 
 var app = builder.Build(); 
 app.UseMiddleware<ExceptionMiddleware>();   // ← primero, para atrapar todo lo que viene después
@@ -44,6 +59,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("FrontendDev");
 
 app.UseAuthorization();
 

@@ -11,5 +11,6 @@ namespace SubastaYa.Application.Interfaces
     {
         Task AddAsync(Wallet wallet);
         Task<Wallet?> GetByUserIdAsync(int userId);
+        void Delete(Wallet wallet);
     }
 }
