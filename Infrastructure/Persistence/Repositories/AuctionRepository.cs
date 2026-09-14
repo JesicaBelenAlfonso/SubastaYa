@@ -2,6 +2,7 @@ using Domain.Entities;
 using Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using SubastaYa.Application.Interfaces;
+using System.Threading.Tasks;
 
 namespace SubastaYa.Infrastructure.Persistence.Repositories
 {

@@ -3,6 +3,7 @@ using SubastaYa.Application.Interfaces;
 using SubastaYa.Application.Mappings;
 using SubastaYa.Application.UseCases.Auctions.Commands;
 using SubastaYa.Domain.Exceptions;
+using System.Threading.Tasks;
 
 namespace SubastaYa.Application.UseCases.Auctions.Handlers
 {
@@ -10,11 +11,13 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
     {
         private readonly IAuctionRepository _auctions;
         private readonly IUnitOfWork _uow;
+        private readonly IAuditService _audit;
 
-        public UpdateAuctionCommandHandler(IAuctionRepository auctions, IUnitOfWork uow)
+        public UpdateAuctionCommandHandler(IAuctionRepository auctions, IUnitOfWork uow, IAuditService audit)
         {
             _auctions = auctions;
             _uow = uow;
+            _audit = audit;
         }
 
         public async Task<AuctionResponseDto> Handle(UpdateAuctionCommand cmd)
@@ -37,6 +40,15 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
             auction.EndDate = cmd.EndDate;
 
             await _uow.SaveChangesAsync();
+
+            await _audit.LogAsync("Auction", auction.Id, "UPDATE", auction.SellerId, new
+            {
+                auction.Title,
+                auction.BasePrice,
+                auction.CategoryId,
+                auction.StartDate,
+                auction.EndDate
+            });
 
             return auction.ToDto();
         }
