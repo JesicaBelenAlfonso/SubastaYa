@@ -15,11 +15,14 @@ namespace SubastaYa.Api.Controllers
             _loginHandler = loginHandler;
         }
 
-        [HttpPost("login")]
+        // POST api/v1/auth/sessions — crea una sesión (login), sin verbos en la URL.
+        [HttpPost("sessions")]
         public async Task<IActionResult> Login(LoginCommand cmd)
         {
             var user = await _loginHandler.Handle(cmd);
-            return Ok(user);
+
+            // 201 Created: se creó el recurso "sesión".
+            return StatusCode(StatusCodes.Status201Created, user);
         }
     }
 }

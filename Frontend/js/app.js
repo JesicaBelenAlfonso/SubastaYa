@@ -92,6 +92,7 @@ const MOCK_AUCTIONS = [
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("grid-subastas")) initCatalogo();
   if (document.getElementById("form-login")) initLogin();
+  if (document.getElementById("form-registro")) initRegistro();
   if (document.getElementById("billetera-app")) initBilletera();
   if (document.getElementById("estado-api")) verificarAPI();
   actualizarNav();
@@ -307,7 +308,7 @@ async function verificarAPI() {
   const ctrl = new AbortController();
   const tiempo = setTimeout(() => ctrl.abort(), 4000);
   try {
-    const res = await fetch(`${API_BASE}/users/1/wallet`, { signal: ctrl.signal });
+    const res = await fetch(`${API_BASE}/users/1/wallets`, { signal: ctrl.signal });
     el.innerHTML = `<i class="bi bi-check-circle me-1"></i>Servidor conectado (HTTP ${res.status})`;
     el.className = "text-center small fw-semibold text-success";
   } catch {
@@ -343,7 +344,7 @@ function initLogin() {
     const password = document.getElementById("password").value;
 
     try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
+      const res = await fetch(`${API_BASE}/auth/sessions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -352,6 +353,61 @@ function initLogin() {
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error ?? "No se pudo iniciar sesión");
+      }
+
+      const user = await res.json();
+      setSession({ userId: user.id, name: user.name, email: user.email });
+      location.href = "index.html";
+    } catch (err) {
+      alerta.textContent = mensajeDeError(err);
+      alerta.classList.remove("d-none");
+    } finally {
+      btns.disabled = false;
+      btns.innerHTML = btnOriginal;
+    }
+  });
+}
+
+/* ============ Registro ============ */
+function initRegistro() {
+  const form = document.getElementById("form-registro");
+  const alerta = document.getElementById("alert-registro");
+
+  const confirmar = document.getElementById("password-confirm");
+  confirmar.addEventListener("input", () => {
+    const coincide = confirmar.value === document.getElementById("password").value;
+    confirmar.setCustomValidity(coincide ? "" : "no-coinciden");
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    alerta.classList.add("d-none");
+
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
+      return;
+    }
+
+    const btns = document.getElementById("btn-registrarse");
+    const btnOriginal = btns.innerHTML;
+    btns.disabled = true;
+    btns.innerHTML =
+      '<span class="spinner-border spinner-border-sm me-2"></span>Creando cuenta...';
+
+    const name = document.getElementById("nombre").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    try {
+      const res = await fetch(`${API_BASE}/users`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, password }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error ?? "No se pudo crear la cuenta.");
       }
 
       const user = await res.json();
@@ -410,7 +466,7 @@ async function cargarBilletera() {
   document.getElementById("loader-billetera").classList.remove("d-none");
   document.getElementById("billetera-cards").classList.add("d-none");
   try {
-    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet`);
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallets`);
     if (!res.ok) throw new Error("No se pudo obtener tu billetera.");
     const b = await res.json();
     document.getElementById("tot-disponible").textContent = formatearPrecio(b.availableBalance);
@@ -431,7 +487,7 @@ async function cargarMovimientos() {
   tbody.innerHTML = "";
   loader.classList.remove("d-none");
   try {
-    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet/transactions`);
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallets/transactions`);
     if (!res.ok) throw new Error("No se pudieron obtener los movimientos.");
     const lista = await res.json();
     vacio.classList.toggle("d-none", lista.length > 0);
@@ -474,7 +530,7 @@ async function hacerMovimiento() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
   try {
-    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet/transactions`, {
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallets/transactions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type: tipo, amount: monto, auctionId: null }),

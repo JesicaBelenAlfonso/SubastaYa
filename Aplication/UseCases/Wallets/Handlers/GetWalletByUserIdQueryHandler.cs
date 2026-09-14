@@ -1,5 +1,6 @@
 ﻿using SubastaYa.Application.DTOs;
 using SubastaYa.Application.Interfaces;
+using SubastaYa.Application.Mappings;
 using SubastaYa.Application.UseCases.Wallets.Queries;
 using SubastaYa.Domain.Exceptions;
 
@@ -19,15 +20,8 @@ namespace SubastaYa.Application.UseCases.Wallets.Handlers
             var wallet = await _wallets.GetByUserIdAsync(query.UserId);
 
             if (wallet is null)
-                throw new DomainException("El usuario no tiene una billetera asociada");
-
-            return new WalletResponseDto
-            {
-                Id = wallet.Id,
-                TotalBalance = wallet.TotalBalance,
-                HeldBalance = wallet.HeldBalance,
-                AvailableBalance = wallet.AvailableBalance
-            };
+                throw new NotFoundException("El usuario no tiene una billetera asociada");
+            return wallet.ToDto();
         }
     }
 }

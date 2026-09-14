@@ -42,9 +42,9 @@ builder.Services.AddScoped<GetUserByIdQueryHandler>();
 builder.Services.AddScoped<DeleteUserCommandHandler>();
 builder.Services.AddScoped<UpdateUserCommandHandler>();
 builder.Services.AddScoped<GetWalletByUserIdQueryHandler>();
-builder.Services.AddScoped<DeleteWalletCommandHandler>();
 builder.Services.AddScoped<ITransactionRepository,TransactionRepository>();
 builder.Services.AddScoped<GetWalletTransactionsQueryHandler>();
+builder.Services.AddScoped<GetTransactionByIdQueryHandler>();
 builder.Services.AddScoped<CreateTransactionCommandHandler>();
 builder.Services.AddScoped<LoginCommandHandler>();
 

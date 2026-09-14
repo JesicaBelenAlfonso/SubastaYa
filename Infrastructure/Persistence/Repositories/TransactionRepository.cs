@@ -33,5 +33,11 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
         {
             return await _ctx.Transactions.AnyAsync(t => t.WalletId == walletId);
         }
+
+        public async Task<Transaction?> GetByIdAsync(int walletId, int id)
+        {
+            return await _ctx.Transactions
+                .FirstOrDefaultAsync(t => t.Id == id && t.WalletId == walletId);
+        }
     }
 }

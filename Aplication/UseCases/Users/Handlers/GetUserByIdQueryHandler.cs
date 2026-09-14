@@ -19,9 +19,9 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
             var user = await _users.GetByIdAsync(query.Id);
 
             if (user is null)
-                return null;               // el controller decide qué hacer con esto
+                return null;               
 
-            return user.ToDto();           // reusamos el mapping que ya armamos
+            return user.ToDto();           
         }
     }
 }

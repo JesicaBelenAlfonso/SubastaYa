@@ -11,8 +11,7 @@ namespace SubastaYa.Api.Controllers
     [Route("api/v1/users")]
     public class UsersController : ControllerBase
     {
-        // El controller no conoce IUserRepository, ni AppDbContext, ni EF Core.
-        // Solo conoce el Handler — una línea de dependencia, no cinco.
+        // Solo conoce el Handler 
         private readonly RegisterUserCommandHandler _registerHandler;
         private readonly GetUserByIdQueryHandler _getByIdHandler;
         private readonly DeleteUserCommandHandler _deleteHandler;

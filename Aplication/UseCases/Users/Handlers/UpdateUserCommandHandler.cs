@@ -30,9 +30,9 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
             if (user is null)
                 throw new DomainException($"No existe un usuario con Id {cmd.Id}");
 
-            user.Name = cmd.Name;             // ← se modifica el objeto en memoria
+            user.Name = cmd.Name;             
 
-            await _uow.SaveChangesAsync();    // ← EF detecta el cambio solo, y hace el UPDATE
+            await _uow.SaveChangesAsync();    
 
             return user.ToDto();
         }

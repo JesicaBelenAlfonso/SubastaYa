@@ -22,10 +22,7 @@ namespace SubastaYa.Infrastructure.Persistence.Configurations
             builder.Property(w => w.RowVersion).IsRowVersion();
 
             // La relación 1:1 con User.
-            // HasOne<User>() sin pasarle una propiedad de navegación
-            // porque Wallet no tiene "public User User { get; set; }"
-            // (no la agregamos, y está bien así por ahora).
-            builder.HasOne<User>()
+            builder.HasOne(w => w.User)
                    .WithOne()
                    .HasForeignKey<Wallet>(w => w.UserId);
 
