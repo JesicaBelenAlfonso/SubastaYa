@@ -427,8 +427,6 @@ function initRegistro() {
 const AYUDA_MOVIMIENTO = {
   DEPOSITO: "Suma dinero a tu saldo disponible (recarga).",
   RETIRO: "Retira dinero de tu saldo disponible.",
-  RETENCION: "Congela dinero para garantizar una oferta.",
-  LIBERACION: "Devuelve dinero congelado a tu saldo disponible.",
 };
 
 const INFO_MOVIMIENTO = {

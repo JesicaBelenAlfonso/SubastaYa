@@ -51,6 +51,12 @@ namespace SubastaYa.Application.UseCases.Transactions.Handlers
 
         private static void ApplyMovement(Wallet wallet, CreateTransactionCommand cmd)
         {
+            // La retención y la liberación las realiza el sistema al procesar
+            // una puja: exigen un AuctionId. El usuario solo puede depositar y retirar.
+            if ((cmd.Type == "RETENCION" || cmd.Type == "LIBERACION")
+                && cmd.AuctionId is null)
+                throw new DomainConflictException("La retención/liberación de saldo solo puede realizarla el sistema al procesar una puja");
+
             switch (cmd.Type)
             {
                 case "DEPOSITO":
