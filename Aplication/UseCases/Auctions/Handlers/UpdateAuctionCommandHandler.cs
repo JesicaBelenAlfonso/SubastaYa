@@ -39,6 +39,9 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
             auction.StartDate = cmd.StartDate;
             auction.EndDate = cmd.EndDate;
 
+            if (cmd.RowVersion is not null)
+                _uow.SetOriginalValue(auction, "RowVersion", cmd.RowVersion);
+
             await _uow.SaveChangesAsync();
 
             await _audit.LogAsync("Auction", auction.Id, "UPDATE", auction.SellerId, new

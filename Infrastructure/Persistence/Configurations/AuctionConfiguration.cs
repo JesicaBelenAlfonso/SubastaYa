@@ -37,6 +37,7 @@ namespace SubastaYa.Infrastructure.Persistence.Configurations
 
             builder.HasIndex(a => a.CategoryId);
             builder.HasIndex(a => a.SellerId);
+            builder.Property(a => a.RowVersion).IsRowVersion();
         }
     }
 }

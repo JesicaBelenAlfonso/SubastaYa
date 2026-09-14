@@ -21,5 +21,10 @@ namespace SubastaYa.Infrastructure.Persistence
         {
             return await _ctx.SaveChangesAsync(ct);
         }
+
+        public void SetOriginalValue(object entity, string propertyName, object? value)
+        {
+            _ctx.Entry(entity).Property(propertyName).OriginalValue = value;
+        }
     }
 }

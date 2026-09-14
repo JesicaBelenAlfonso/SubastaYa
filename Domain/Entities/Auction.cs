@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.ComponentModel.DataAnnotations;
 namespace Domain.Entities
 {
     public class Auction
@@ -24,8 +25,8 @@ namespace Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public string Status { get; set; } 
-        public int Version  { get; set; }
+        public string Status { get; set; }
+        [Timestamp] public byte[] RowVersion { get; set; } = null!;
         public Auction() { 
 
 

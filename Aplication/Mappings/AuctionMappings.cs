@@ -1,7 +1,9 @@
 using Domain.Entities;
 using SubastaYa.Application.DTOs;
 
+
 namespace SubastaYa.Application.Mappings
+
 {
     public static class AuctionMappings
     {
@@ -19,7 +21,6 @@ namespace SubastaYa.Application.Mappings
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
                 Status = "Pending",
-                Version = 0
             };
         }
 
@@ -37,7 +38,8 @@ namespace SubastaYa.Application.Mappings
                 MinIncrement = auction.MinIncrement,
                 StartDate = auction.StartDate,
                 EndDate = auction.EndDate,
-                Status = auction.Status
+                Status = auction.Status,
+                RowVersion = auction.RowVersion
             };
         }
     }
