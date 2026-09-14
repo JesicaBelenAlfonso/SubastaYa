@@ -2,6 +2,7 @@
 using SubastaYa.Application.Interfaces;
 using SubastaYa.Application.Mappings;
 using SubastaYa.Application.UseCases.Users.Queries;
+using System.Threading.Tasks;
 
 namespace SubastaYa.Application.UseCases.Users.Handlers
 {

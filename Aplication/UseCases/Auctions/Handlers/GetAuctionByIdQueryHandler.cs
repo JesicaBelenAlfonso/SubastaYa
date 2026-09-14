@@ -2,6 +2,7 @@ using SubastaYa.Application.DTOs;
 using SubastaYa.Application.Interfaces;
 using SubastaYa.Application.Mappings;
 using SubastaYa.Application.UseCases.Auctions.Queries;
+using System.Threading.Tasks;
 
 namespace SubastaYa.Application.UseCases.Auctions.Handlers
 {

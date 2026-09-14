@@ -10,11 +10,13 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
     {
         private readonly IAuctionRepository _auctions;
         private readonly IUnitOfWork _uow;
+        private readonly IAuditService _audit;
 
-        public CreateAuctionCommandHandler(IAuctionRepository auctions, IUnitOfWork uow)
+        public CreateAuctionCommandHandler(IAuctionRepository auctions, IUnitOfWork uow, IAuditService audit)
         {
             _auctions = auctions;
             _uow = uow;
+            _audit = audit;
         }
 
         public async Task<AuctionResponseDto> Handle(CreateAuctionCommand cmd)
@@ -32,6 +34,13 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
 
             await _auctions.AddAsync(auction);
             await _uow.SaveChangesAsync();
+
+            await _audit.LogAsync("Auction", auction.Id, "CREATE", cmd.SellerId, new
+            {
+                auction.Title,
+                auction.BasePrice,
+                auction.CategoryId
+            });
 
             return auction.ToDto();
         }
