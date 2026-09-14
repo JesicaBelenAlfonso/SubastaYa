@@ -2,6 +2,7 @@ using Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SubastaYa.Application.Interfaces;
+using SubastaYa.Application.UseCases.Auctions.Handlers;
 using SubastaYa.Application.UseCases.Auth.Handlers;
 using SubastaYa.Application.UseCases.Transactions.Handlers;
 using SubastaYa.Application.UseCases.Users.Handlers;
@@ -47,6 +48,11 @@ builder.Services.AddScoped<GetWalletTransactionsQueryHandler>();
 builder.Services.AddScoped<GetTransactionByIdQueryHandler>();
 builder.Services.AddScoped<CreateTransactionCommandHandler>();
 builder.Services.AddScoped<LoginCommandHandler>();
+builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
+builder.Services.AddScoped<CreateAuctionCommandHandler>();
+builder.Services.AddScoped<GetAuctionByIdQueryHandler>();
+builder.Services.AddScoped<DeleteAuctionCommandHandler>();
+builder.Services.AddScoped<UpdateAuctionCommandHandler>();
 
 var app = builder.Build(); 
 app.UseMiddleware<ExceptionMiddleware>();   // ← primero, para atrapar todo lo que viene después

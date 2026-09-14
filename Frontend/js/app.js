@@ -135,7 +135,7 @@ function actualizarNav() {
 async function fetchSubastas() {
   try {
     // Endpoint futuro (a cargo de la compañera); si no responde, usamos el catálogo de ejemplo.
-    const res = await fetch(`${API_BASE}/subastas`);
+    const res = await fetch(`${API_BASE}/auctions`);
     if (!res.ok) throw new Error("sin respuesta");
     return await res.json();
   } catch {
