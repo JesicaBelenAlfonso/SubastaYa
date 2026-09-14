@@ -8,9 +8,9 @@ namespace SubastaYa.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.HasKey(c => c.id);
+            builder.HasKey(c => c.Id);
 
-            builder.Property(c => c.id)
+            builder.Property(c => c.Id)
                    .HasColumnName("Id");
 
             builder.Property(c => c.Name)

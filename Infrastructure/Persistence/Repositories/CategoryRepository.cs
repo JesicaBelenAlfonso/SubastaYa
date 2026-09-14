@@ -18,6 +18,6 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
             => await _ctx.Categories.OrderBy(c => c.Name).ToListAsync();
 
         public async Task<Category?> GetByIdAsync(int id)
-            => await _ctx.Categories.FirstOrDefaultAsync(c => c.id == id);
+            => await _ctx.Categories.FirstOrDefaultAsync(c => c.Id == id);
     }
 }

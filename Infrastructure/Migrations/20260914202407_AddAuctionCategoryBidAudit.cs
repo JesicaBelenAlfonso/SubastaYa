@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SubastaYa.Infrastructure.Persistence.Migrations
+namespace SubastaYa.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class AddAuctionCategoryBidAudit : Migration

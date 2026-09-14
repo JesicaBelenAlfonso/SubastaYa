@@ -9,7 +9,7 @@ namespace SubastaYa.Application.Mappings
         {
             return new CategoryResponseDto
             {
-                Id = category.id,
+                Id = category.Id,
                 Name = category.Name,
                 UrlIcono = category.UrlIcono
             };

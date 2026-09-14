@@ -152,12 +152,12 @@ namespace SubastaYa.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Category", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -169,7 +169,7 @@ namespace SubastaYa.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Categories");
                 });
@@ -303,11 +303,13 @@ namespace SubastaYa.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Wallet", b =>
                 {
-                    b.HasOne("Domain.Entities.User", null)
+                    b.HasOne("Domain.Entities.User", "User")
                         .WithOne()
                         .HasForeignKey("Domain.Entities.Wallet", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
