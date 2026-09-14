@@ -46,9 +46,9 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
 
             var wallet = new Wallet
             {
-                UserId = user.Id,
                 TotalBalance = 0,
-                HeldBalance = 0
+                HeldBalance = 0,
+                User = user
             };
 
             await _wallets.AddAsync(wallet);
