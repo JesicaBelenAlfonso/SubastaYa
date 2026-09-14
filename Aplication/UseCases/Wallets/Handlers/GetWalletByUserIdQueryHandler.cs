@@ -19,8 +19,7 @@ namespace SubastaYa.Application.UseCases.Wallets.Handlers
             var wallet = await _wallets.GetByUserIdAsync(query.UserId);
 
             if (wallet is null)
-                throw new DomainException("El usuario no tiene una billetera asociada");
-
+                throw new NotFoundException("El usuario no tiene una billetera asociada");
             return new WalletResponseDto
             {
                 Id = wallet.Id,

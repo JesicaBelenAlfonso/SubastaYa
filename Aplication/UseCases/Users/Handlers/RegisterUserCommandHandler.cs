@@ -11,13 +11,13 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
     public class RegisterUserCommandHandler
     {
         private readonly IUserRepository _users;
-        private readonly IWalletRepository _wallets;   // ← nueva dependencia
+        private readonly IWalletRepository _wallets;   
         private readonly IPasswordHasher _hasher;
         private readonly IUnitOfWork _uow;
 
         public RegisterUserCommandHandler(
             IUserRepository users,
-            IWalletRepository wallets,              // ← se inyecta acá también
+            IWalletRepository wallets,              
             IPasswordHasher hasher,
             IUnitOfWork uow)
         {
@@ -31,8 +31,7 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
         {
             var existente = await _users.GetByEmailAsync(cmd.Email);
             if (existente is not null)
-                throw new DomainException("Ya existe un usuario con ese email");
-
+                throw new DomainConflictException("Ya existe un usuario con ese email");
             var passwordHash = _hasher.Hash(cmd.Password);
 
             var user = new User
@@ -45,13 +44,6 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
 
             await _users.AddAsync(user);
 
-            // OJO ACÁ — esto es lo más importante de este paso.
-            // Guardamos primero al User, para que la base le asigne un Id
-            // (recién ahí existe user.Id, antes es 0).
-            await _uow.SaveChangesAsync();
-
-            // Recién con el Id ya generado, podemos crear el Wallet
-            // apuntando al User correcto.
             var wallet = new Wallet
             {
                 UserId = user.Id,
@@ -60,7 +52,8 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
             };
 
             await _wallets.AddAsync(wallet);
-            await _uow.SaveChangesAsync();   // segunda confirmación, para el Wallet
+
+            await _uow.SaveChangesAsync();
 
             return user.ToDto();
         }

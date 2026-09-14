@@ -1,4 +1,5 @@
-﻿using SubastaYa.Domain.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using SubastaYa.Domain.Exceptions;
 
 public class ExceptionMiddleware
 {
@@ -15,19 +16,35 @@ public class ExceptionMiddleware
     {
         try
         {
-            await _next(ctx);   // ← acá "adentro" pasa TODO: routing, controller, handler...
+            await _next(ctx);
         }
-        catch (InvalidCredentialsException ex)              // credenciales inválidas → 401
+        catch (NotFoundException ex)                    // recurso inexistente → 404
+        {
+            ctx.Response.StatusCode = StatusCodes.Status404NotFound;
+            await ctx.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
+        catch (DomainConflictException ex)              // conflicto de estado → 409
+        {
+            ctx.Response.StatusCode = StatusCodes.Status409Conflict;
+            await ctx.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
+        catch (DbUpdateConcurrencyException ex)          // conflicto de concurrencia (optimistic lock) → 409
+        {
+            _logger.LogWarning(ex, "Conflicto de concurrencia al guardar cambios");
+            ctx.Response.StatusCode = StatusCodes.Status409Conflict;
+            await ctx.Response.WriteAsJsonAsync(new { error = "El recurso fue modificado por otro proceso. Reintentá la operación." });
+        }
+        catch (InvalidCredentialsException ex)          // credenciales inválidas → 401
         {
             ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await ctx.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
-        catch (DomainException ex)              // agarra la excepción de negocio
+        catch (DomainException ex)                      // regla de negocio → 400
         {
             ctx.Response.StatusCode = StatusCodes.Status400BadRequest;
             await ctx.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
-        catch (Exception ex)                     // agarra cualquier otra cosa no prevista
+        catch (Exception ex)                            // resto → 500
         {
             _logger.LogError(ex, "Error no controlado");
             ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;

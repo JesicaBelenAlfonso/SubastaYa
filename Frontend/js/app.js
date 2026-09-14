@@ -307,7 +307,7 @@ async function verificarAPI() {
   const ctrl = new AbortController();
   const tiempo = setTimeout(() => ctrl.abort(), 4000);
   try {
-    const res = await fetch(`${API_BASE}/users/1/wallet`, { signal: ctrl.signal });
+    const res = await fetch(`${API_BASE}/users/1/wallets`, { signal: ctrl.signal });
     el.innerHTML = `<i class="bi bi-check-circle me-1"></i>Servidor conectado (HTTP ${res.status})`;
     el.className = "text-center small fw-semibold text-success";
   } catch {
@@ -343,7 +343,7 @@ function initLogin() {
     const password = document.getElementById("password").value;
 
     try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
+      const res = await fetch(`${API_BASE}/auth/sessions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -410,7 +410,7 @@ async function cargarBilletera() {
   document.getElementById("loader-billetera").classList.remove("d-none");
   document.getElementById("billetera-cards").classList.add("d-none");
   try {
-    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet`);
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallets`);
     if (!res.ok) throw new Error("No se pudo obtener tu billetera.");
     const b = await res.json();
     document.getElementById("tot-disponible").textContent = formatearPrecio(b.availableBalance);
@@ -431,7 +431,7 @@ async function cargarMovimientos() {
   tbody.innerHTML = "";
   loader.classList.remove("d-none");
   try {
-    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet/transactions`);
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallets/transactions`);
     if (!res.ok) throw new Error("No se pudieron obtener los movimientos.");
     const lista = await res.json();
     vacio.classList.toggle("d-none", lista.length > 0);
@@ -474,7 +474,7 @@ async function hacerMovimiento() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
   try {
-    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallet/transactions`, {
+    const res = await fetch(`${API_BASE}/users/${window.__walletUserId}/wallets/transactions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type: tipo, amount: monto, auctionId: null }),

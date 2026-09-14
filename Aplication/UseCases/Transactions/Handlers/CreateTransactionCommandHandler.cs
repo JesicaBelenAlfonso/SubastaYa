@@ -23,29 +23,30 @@ namespace SubastaYa.Application.UseCases.Transactions.Handlers
             _uow = uow;
         }
 
-        public async Task<WalletResponseDto> Handle(CreateTransactionCommand cmd)
+        public async Task<TransactionResponseDto> Handle(CreateTransactionCommand cmd)
         {
             var wallet = await _wallets.GetByUserIdAsync(cmd.UserId)
-                ?? throw new DomainException("El usuario no tiene una billetera asociada");
+                ?? throw new NotFoundException("El usuario no tiene una billetera asociada");
 
             ApplyMovement(wallet, cmd);
 
             // El ledger es append-only: cada movimiento se registra como una
             // Transaction nueva, nunca se modifica ni se borra.
-            await _transactions.AddAsync(new Transaction
+            var transaction = new Transaction
             {
                 WalletId = wallet.Id,
                 Type = cmd.Type,
                 Amount = cmd.Amount,
                 AuctionId = cmd.AuctionId,
                 Date = DateTime.UtcNow
-            });
+            };
+            await _transactions.AddAsync(transaction);
 
             // Un solo SaveChanges: o se aplica el movimiento y se registra
             // la Transaction, o no pasa nada (atómico).
             await _uow.SaveChangesAsync();
 
-            return wallet.ToDto();
+            return transaction.ToDto();
         }
 
         private static void ApplyMovement(Wallet wallet, CreateTransactionCommand cmd)
@@ -58,19 +59,19 @@ namespace SubastaYa.Application.UseCases.Transactions.Handlers
 
                 case "RETIRO":
                     if (cmd.Amount > wallet.AvailableBalance)
-                        throw new DomainException("Saldo disponible insuficiente para retirar");
+                        throw new DomainConflictException("Saldo disponible insuficiente para retirar");
                     wallet.TotalBalance -= cmd.Amount;
                     break;
 
                 case "RETENCION":
                     if (cmd.Amount > wallet.AvailableBalance)
-                        throw new DomainException("Saldo disponible insuficiente para congelar");
+                        throw new DomainConflictException("Saldo disponible insuficiente para congelar");
                     wallet.HeldBalance += cmd.Amount;
                     break;
 
                 case "LIBERACION":
                     if (cmd.Amount > wallet.HeldBalance)
-                        throw new DomainException("El monto congelado no alcanza para liberar");
+                        throw new DomainConflictException("El monto congelado no alcanza para liberar");
                     wallet.HeldBalance -= cmd.Amount;
                     break;
 
