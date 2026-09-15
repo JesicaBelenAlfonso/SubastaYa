@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using SubastaYa.Domain.Entities;
 using SubastaYa.Application.DTOs;
 
 namespace SubastaYa.Application.Mappings

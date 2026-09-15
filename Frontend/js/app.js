@@ -8,86 +8,29 @@ const ESTADOS = {
   Finalizada: { label: "Finalizada", clase: "bg-danger" },
 };
 
-const MOCK_AUCTIONS = [
-  {
-    id: 1,
-    titulo: "Reloj de bolsillo Longines 1920",
-    descripcion: "Reloj de bolsillo suizo con esfera esmaltada.",
-    urlImagen: "https://picsum.photos/seed/subasta1/600/400",
-    categoria: "Antigüedades",
-    precioBase: 45000,
-    ofertaActual: 78000,
-    cantidadPujas: 14,
-    fechaInicio: "2026-08-01T10:00:00Z",
-    fechaFin: "2026-09-15T20:00:00Z",
-    estado: "Activa",
-  },
-  {
-    id: 2,
-    titulo: "Mesa ratona estilo Luis XV",
-    descripcion: "Madera de nogal tallada a mano.",
-    urlImagen: "https://picsum.photos/seed/subasta2/600/400",
-    categoria: "Muebles",
-    precioBase: 220000,
-    ofertaActual: 275000,
-    cantidadPujas: 9,
-    fechaInicio: "2026-08-05T10:00:00Z",
-    fechaFin: "2026-09-12T20:00:00Z",
-    estado: "Activa",
-  },
-  {
-    id: 3,
-    titulo: "Colección de monedas argentinas",
-    descripcion: "Lote de 40 piezas del período 1880-1950.",
-    urlImagen: "https://picsum.photos/seed/subasta3/600/400",
-    categoria: "Numismática",
-    precioBase: 95000,
-    ofertaActual: 132000,
-    cantidadPujas: 21,
-    fechaInicio: "2026-08-10T10:00:00Z",
-    fechaFin: "2026-09-18T20:00:00Z",
-    estado: "Activa",
-  },
-  {
-    id: 4,
-    titulo: "Lámpara de pie art déco",
-    descripcion: "Bronce y vidrio opalino, década del 30.",
-    urlImagen: "https://picsum.photos/seed/subasta4/600/400",
-    categoria: "Iluminación",
-    precioBase: 51000,
-    ofertaActual: 51000,
-    cantidadPujas: 2,
-    fechaInicio: "2026-09-05T10:00:00Z",
-    fechaFin: "2026-10-02T20:00:00Z",
-    estado: "Proxima",
-  },
-  {
-    id: 5,
-    titulo: "Oleografía firmada, paisaje pampeano",
-    descripcion: "Marcos en madera dorada, certificada.",
-    urlImagen: "https://picsum.photos/seed/subasta5/600/400",
-    categoria: "Arte",
-    precioBase: 180000,
-    ofertaActual: 198500,
-    cantidadPujas: 11,
-    fechaInicio: "2026-07-20T10:00:00Z",
-    fechaFin: "2026-09-02T20:00:00Z",
-    estado: "Finalizada",
-  },
-  {
-    id: 6,
-    titulo: "Juego de té inglés Royal Doulton",
-    descripcion: "Porcelana, 12 piezas, perfecto estado.",
-    urlImagen: "https://picsum.photos/seed/subasta6/600/400",
-    categoria: "Porcelana",
-    precioBase: 88000,
-    ofertaActual: 143000,
-    cantidadPujas: 17,
-    fechaInicio: "2026-08-08T10:00:00Z",
-    fechaFin: "2026-09-20T20:00:00Z",
-    estado: "Activa",
-  },
-];
+function normalizarEstado(estado, inicio, fin) {
+  if (estado === "Activa" || estado === "Proxima" || estado === "Finalizada") return estado;
+  const ahora = new Date();
+  if (estado === "Pending" || new Date(inicio) > ahora) return "Proxima";
+  if (estado === "Active") return "Activa";
+  return "Finalizada";
+}
+
+function normalizarSubasta(a) {
+  return {
+    id: a.id,
+    titulo: a.title,
+    descripcion: a.descripcion,
+    urlImagen: a.urlImagen || `https://picsum.photos/seed/subasta${a.id}/600/400`,
+    categoria: a.categoria || "General",
+    precioBase: a.basePrice,
+    ofertaActual: a.ofertaActual ?? a.basePrice,
+    cantidadPujas: a.cantidadPujas ?? 0,
+    fechaInicio: a.startDate,
+    fechaFin: a.endDate,
+    estado: normalizarEstado(a.status, a.startDate, a.endDate),
+  };
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("grid-subastas")) initCatalogo();
@@ -134,10 +77,11 @@ function actualizarNav() {
 /* ============ Catálogo ============ */
 async function fetchSubastas() {
   try {
-    // Endpoint futuro (a cargo de la compañera); si no responde, usamos el catálogo de ejemplo.
+    // Listado real desde la API; si no responde, usamos el catálogo de ejemplo.
     const res = await fetch(`${API_BASE}/auctions`);
     if (!res.ok) throw new Error("sin respuesta");
-    return await res.json();
+    const data = await res.json();
+    return data.map(normalizarSubasta);
   } catch {
     return MOCK_AUCTIONS;
   }

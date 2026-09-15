@@ -1,5 +1,4 @@
-﻿using Infraestructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SubastaYa.Application.Interfaces;
 using SubastaYa.Application.Services;
@@ -54,6 +53,7 @@ builder.Services.AddScoped<LoginCommandHandler>();
 builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
 builder.Services.AddScoped<CreateAuctionCommandHandler>();
 builder.Services.AddScoped<GetAuctionByIdQueryHandler>();
+builder.Services.AddScoped<GetAllAuctionsQueryHandler>();
 builder.Services.AddScoped<UpdateAuctionCommandHandler>();
 builder.Services.AddScoped<DeleteAuctionCommandHandler>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

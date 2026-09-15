@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aplication\SubastaYa.Application.csproj" />
-    <ProjectReference Include="..\Domain\SubastaYa.Domain.csproj" />
   </ItemGroup>
 
 </Project>

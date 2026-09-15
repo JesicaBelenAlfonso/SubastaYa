@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Domain.Entities;
+using SubastaYa.Domain.Entities;
 using SubastaYa.Application.Interfaces;
 
 namespace SubastaYa.Application.Services

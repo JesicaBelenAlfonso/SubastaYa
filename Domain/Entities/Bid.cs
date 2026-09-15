@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Domain.Entities
+namespace SubastaYa.Domain.Entities
 {
     public class Bid//puja
     {

@@ -9,7 +9,7 @@ namespace SubastaYa.Application.DTOs
     public class CategoryResponseDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string UrlIcono { get; set; }
+        public string Name { get; set; } = null!;
+        public string UrlIcono { get; set; } = null!;
     }
 }

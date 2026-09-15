@@ -2,7 +2,7 @@ using SubastaYa.Application.DTOs;
 using SubastaYa.Application.Interfaces;
 using SubastaYa.Application.Mappings;
 using SubastaYa.Application.UseCases.Transactions.Commands;
-using Domain.Entities;
+using SubastaYa.Domain.Entities;
 using SubastaYa.Domain.Exceptions;
 
 namespace SubastaYa.Application.UseCases.Transactions.Handlers

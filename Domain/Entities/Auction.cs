@@ -6,7 +6,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-namespace Domain.Entities
+namespace SubastaYa.Domain.Entities
 {
     public class Auction
     {
@@ -14,10 +14,10 @@ namespace Domain.Entities
         public int SellerId { get; set; }
 
         public int CategoryId { get; set; }
-        public String Title { get; set; }
+        public String Title { get; set; } = null!;
 
-        public String Descripcion   { get; set; }
-        public String UrlImagen { get; set; }
+        public String Descripcion   { get; set; } = null!;
+        public String UrlImagen { get; set; } = null!;
 
         public decimal BasePrice { get; set; }
 
@@ -25,7 +25,7 @@ namespace Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public string Status { get; set; }
+        public string Status { get; set; } = null!;
         [Timestamp] public byte[] RowVersion { get; set; } = null!;
         public Auction() { 
 

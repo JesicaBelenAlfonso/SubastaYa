@@ -1,4 +1,4 @@
-﻿using Infraestructure.Persistence;
+﻿using SubastaYa.Infrastructure.Persistence;
 using SubastaYa.Application.Interfaces;
 using System;
 using System.Collections.Generic;

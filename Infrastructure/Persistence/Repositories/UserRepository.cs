@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Infraestructure.Persistence;
+﻿using SubastaYa.Domain.Entities;
+using SubastaYa.Infrastructure.Persistence;
 using SubastaYa.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SubastaYa.Application.DTOs;
+
 
 namespace SubastaYa.Infrastructure.Persistence.Repositories
 {

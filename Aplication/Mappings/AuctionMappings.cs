@@ -1,4 +1,4 @@
-using Domain.Entities;
+using SubastaYa.Domain.Entities;
 using SubastaYa.Application.DTOs;
 
 
@@ -24,7 +24,11 @@ namespace SubastaYa.Application.Mappings
             };
         }
 
-        public static AuctionResponseDto ToDto(this Auction auction)
+        public static AuctionResponseDto ToDto(
+            this Auction auction,
+            string? categoria = null,
+            decimal? ofertaActual = null,
+            int cantidadPujas = 0)
         {
             return new AuctionResponseDto
             {
@@ -39,6 +43,9 @@ namespace SubastaYa.Application.Mappings
                 StartDate = auction.StartDate,
                 EndDate = auction.EndDate,
                 Status = auction.Status,
+                Categoria = categoria ?? "General",
+                OfertaActual = ofertaActual,
+                CantidadPujas = cantidadPujas,
                 RowVersion = auction.RowVersion
             };
         }

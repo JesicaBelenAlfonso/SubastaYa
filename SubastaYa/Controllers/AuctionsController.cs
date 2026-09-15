@@ -6,24 +6,34 @@ using SubastaYa.Application.UseCases.Auctions.Queries;
 namespace SubastaYa.Api.Controllers
 {
     [ApiController]
-    [Route("api/auctions")]
+    [Route("api/v1/auctions")]
     public class AuctionsController : ControllerBase
     {
         private readonly CreateAuctionCommandHandler _createHandler;
         private readonly GetAuctionByIdQueryHandler _getByIdHandler;
+        private readonly GetAllAuctionsQueryHandler _getAllHandler;
         private readonly DeleteAuctionCommandHandler _deleteHandler;
         private readonly UpdateAuctionCommandHandler _updateHandler;
 
         public AuctionsController(
             CreateAuctionCommandHandler createHandler,
             GetAuctionByIdQueryHandler getByIdHandler,
+            GetAllAuctionsQueryHandler getAllHandler,
             DeleteAuctionCommandHandler deleteHandler,
             UpdateAuctionCommandHandler updateHandler)
         {
             _createHandler = createHandler;
             _getByIdHandler = getByIdHandler;
+            _getAllHandler = getAllHandler;
             _deleteHandler = deleteHandler;
             _updateHandler = updateHandler;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var auctions = await _getAllHandler.Handle(new GetAllAuctionsQuery());
+            return Ok(auctions);
         }
 
         [HttpPost]

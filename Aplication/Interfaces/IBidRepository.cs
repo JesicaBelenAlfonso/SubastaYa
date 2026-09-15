@@ -1,4 +1,4 @@
-using Domain.Entities;
+using SubastaYa.Domain.Entities;
 
 namespace SubastaYa.Application.Interfaces
 {
@@ -6,5 +6,6 @@ namespace SubastaYa.Application.Interfaces
     {
         Task AddAsync(Bid bid);
         Task<decimal?> GetHighestAmountByAuctionIdAsync(int auctionId);
+        Task<int> GetCountByAuctionIdAsync(int auctionId);
     }
 }

@@ -1,9 +1,8 @@
-﻿using Domain.Entities;
-using SubastaYa.Application.DTOs;
+﻿using SubastaYa.Application.DTOs;
 using SubastaYa.Application.Interfaces;
 using SubastaYa.Application.Mappings;
 using SubastaYa.Application.UseCases.Users.Commands;
-
+using SubastaYa.Domain.Entities;
 using SubastaYa.Domain.Exceptions;
 
 namespace SubastaYa.Application.UseCases.Users.Handlers
@@ -11,13 +10,13 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
     public class RegisterUserCommandHandler
     {
         private readonly IUserRepository _users;
-        private readonly IWalletRepository _wallets;   
+        private readonly IWalletRepository _wallets;
         private readonly IPasswordHasher _hasher;
         private readonly IUnitOfWork _uow;
 
         public RegisterUserCommandHandler(
             IUserRepository users,
-            IWalletRepository wallets,              
+            IWalletRepository wallets,
             IPasswordHasher hasher,
             IUnitOfWork uow)
         {

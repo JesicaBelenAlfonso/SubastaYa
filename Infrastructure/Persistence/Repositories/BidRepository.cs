@@ -1,5 +1,5 @@
-using Domain.Entities;
-using Infraestructure.Persistence;
+using SubastaYa.Domain.Entities;
+using SubastaYa.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using SubastaYa.Application.Interfaces;
 
@@ -28,6 +28,10 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
             return await _ctx.Bids
                 .Where(b => b.AuctionId == auctionId)
                 .MaxAsync(b => b.Amount);
+        }
+        public async Task<int> GetCountByAuctionIdAsync(int auctionId)
+        {
+            return await _ctx.Bids.CountAsync(b => b.AuctionId == auctionId);
         }
     }
 }
