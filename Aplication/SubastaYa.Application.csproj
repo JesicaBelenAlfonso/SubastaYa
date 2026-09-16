@@ -10,4 +10,10 @@
     <ProjectReference Include="..\Domain\SubastaYa.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Audit\Commands\" />
+    <Folder Include="UseCases\Audit\Queries\" />
+    <Folder Include="UseCases\Audit\Handlers\" />
+  </ItemGroup>
+
 </Project>

@@ -25,7 +25,7 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
             if (auction is null)
                 throw new DomainException($"No existe una subasta con Id {cmd.Id}");
 
-            await _audit.LogAsync("Auction", auction.Id, "DELETE", auction.SellerId, new
+            await _audit.LogAsync("Auction", auction.Id, AuditActions.DELETE, auction.SellerId, new
             {
                 auction.Title
             });

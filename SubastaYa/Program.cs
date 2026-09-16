@@ -1,14 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SubastaYa.Application;
 using SubastaYa.Application.Interfaces;
 using SubastaYa.Application.Services;
 using SubastaYa.Application.UseCases.Auctions.Handlers;
+using SubastaYa.Application.UseCases.Audits.Handlers;
 using SubastaYa.Application.UseCases.Auth.Handlers;
 using SubastaYa.Application.UseCases.Bids.Handlers;
 using SubastaYa.Application.UseCases.Categories.Handlers;
 using SubastaYa.Application.UseCases.Transactions.Handlers;
 using SubastaYa.Application.UseCases.Users.Handlers;
 using SubastaYa.Application.UseCases.Wallets.Handlers;
+using SubastaYa.Api.Workers;
 using SubastaYa.Infrastructure.Persistence;
 using SubastaYa.Infrastructure.Persistence.Repositories;
 using SubastaYa.Infrastructure.Segurity;
@@ -63,6 +66,11 @@ builder.Services.AddScoped<IBidRepository, BidRepository>();
 builder.Services.AddScoped<CreateBidCommandHandler>();
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
 builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<GetAuditsQueryHandler>();
+builder.Services.AddSingleton(
+    builder.Configuration.GetSection("Auction").Get<AuctionOptions>() ?? new AuctionOptions());
+builder.Services.AddScoped<IAuctionFinalizationService, AuctionFinalizationService>();
+builder.Services.AddHostedService<AuctionStatusWorker>();
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();   // â† primero, para atrapar todo lo que viene despuÃ©s

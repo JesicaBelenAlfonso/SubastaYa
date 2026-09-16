@@ -12,15 +12,18 @@ namespace SubastaYa.Application.UseCases.Transactions.Handlers
         private readonly IWalletRepository _wallets;
         private readonly ITransactionRepository _transactions;
         private readonly IUnitOfWork _uow;
+        private readonly IAuditService _audit;
 
         public CreateTransactionCommandHandler(
             IWalletRepository wallets,
             ITransactionRepository transactions,
-            IUnitOfWork uow)
+            IUnitOfWork uow,
+            IAuditService audit)
         {
             _wallets = wallets;
             _transactions = transactions;
             _uow = uow;
+            _audit = audit;
         }
 
         public async Task<TransactionResponseDto> Handle(CreateTransactionCommand cmd)
@@ -29,6 +32,16 @@ namespace SubastaYa.Application.UseCases.Transactions.Handlers
                 ?? throw new NotFoundException("El usuario no tiene una billetera asociada");
 
             ApplyMovement(wallet, cmd);
+
+            if (cmd.Type == "DEPOSITO")
+            {
+                await _audit.LogAsync("Wallet", wallet.Id, AuditActions.WALLET_MANUAL_CREDIT, cmd.UserId, new
+                {
+                    walletId = wallet.Id,
+                    amount = cmd.Amount,
+                    newTotalBalance = wallet.TotalBalance
+                });
+            }
 
             // El ledger es append-only: cada movimiento se registra como una
             // Transaction nueva, nunca se modifica ni se borra.

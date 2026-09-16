@@ -12,5 +12,6 @@ namespace SubastaYa.Application.Interfaces
         Task<IEnumerable<Auction>> GetAllAsync(string? status, int? categoryId, decimal? minPrice, decimal? maxPrice, string? sortBy);
         Task DeleteAsync(Auction auction);
         void Delete(Auction auction);
+        Task<IEnumerable<Auction>> GetExpiredActiveAsync(DateTime now);
     }
 }
