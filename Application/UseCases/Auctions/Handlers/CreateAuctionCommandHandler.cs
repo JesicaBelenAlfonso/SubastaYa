@@ -37,7 +37,7 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
 
             await _auctions.AddAsync(auction);
 
-            await _audit.LogAsync("Auction", auction.Id, AuditActions.CREATE, cmd.SellerId, new
+            await _audit.LogAsync("Auction", auction.Id, AuditAction.CREATE, cmd.SellerId, new
             {
                 auction.Title,
                 auction.BasePrice,

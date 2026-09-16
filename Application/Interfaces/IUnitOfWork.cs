@@ -10,5 +10,6 @@ namespace SubastaYa.Application.Interfaces
     {
         Task<int> SaveChangesAsync(CancellationToken ct = default);
         void SetOriginalValue(object entity, string propertyName, object? value);
+        void DetachAll();
     }
 }

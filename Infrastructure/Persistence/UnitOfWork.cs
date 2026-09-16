@@ -26,5 +26,10 @@ namespace SubastaYa.Infrastructure.Persistence
         {
             _ctx.Entry(entity).Property(propertyName).OriginalValue = value;
         }
+
+        public void DetachAll()
+        {
+            _ctx.ChangeTracker.Clear();
+        }
     }
 }

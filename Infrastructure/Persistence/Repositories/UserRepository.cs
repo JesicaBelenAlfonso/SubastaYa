@@ -29,9 +29,7 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
         public async Task AddAsync(User user)
         {
             await _ctx.Users.AddAsync(user);
-            // OJO: acá NO llamamos a SaveChangesAsync().
-            // Eso es responsabilidad exclusiva del UnitOfWork,
-            // que se ejecuta después, desde el Handler.
+            // OJO: NO llamamos a SaveChangesAsync acá (lo hace el UnitOfWork).
         }
         public async Task<User?> GetByIdAsync(int id)                    
        => await _ctx.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);

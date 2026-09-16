@@ -15,6 +15,14 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
             _ctx = ctx;
         }
 
+        public async Task AddAsync(Category category)
+        {
+            await _ctx.Categories.AddAsync(category);
+        }
+
+        public async Task<bool> ExistsByNameAsync(string name)
+            => await _ctx.Categories.AnyAsync(c => c.Name == name);
+
         public async Task<IEnumerable<Category>> GetAllAsync()
             => await _ctx.Categories.OrderBy(c => c.Name).ToListAsync();
 

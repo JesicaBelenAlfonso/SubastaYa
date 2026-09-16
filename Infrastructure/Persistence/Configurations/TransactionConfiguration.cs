@@ -12,14 +12,15 @@ namespace SubastaYa.Infrastructure.Persistence.Configurations
 
             builder.Property(t => t.Type)
                    .HasMaxLength(50)
+                   .HasConversion(
+                       v => v.ToString().ToUpperInvariant(),
+                       v => Enum.Parse<TransactionType>(v, true))
                    .IsRequired();
 
             builder.Property(t => t.Amount)
                    .HasPrecision(12, 2);
 
-            // El ledger apunta a la billetera que le dio origen.
-            // OnDelete Restrict: no se puede borrar una billetera con
-            // movimientos — el historial contable es inmutable.
+            // OnDelete Restrict: el historial contable es inmutable.
             builder.HasOne<Wallet>()
                    .WithMany()
                    .HasForeignKey(t => t.WalletId)

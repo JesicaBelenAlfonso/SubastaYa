@@ -19,9 +19,7 @@ namespace SubastaYa.Infrastructure.Persistence.Configurations
                    .HasMaxLength(150)
                    .IsRequired();
 
-            // Esto genera un índice UNIQUE — evita que dos usuarios
-            // se registren con el mismo email, a nivel base de datos
-            // (no solo a nivel código).
+            // Índice UNIQUE de email a nivel base de datos.
             builder.HasIndex(u => u.Email).IsUnique();
 
             builder.Property(u => u.Name)

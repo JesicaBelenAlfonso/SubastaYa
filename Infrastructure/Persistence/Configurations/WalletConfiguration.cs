@@ -10,25 +10,19 @@ namespace SubastaYa.Infrastructure.Persistence.Configurations
         {
             builder.HasKey(w => w.Id);
 
-            // Precisión decimal: sin esto, EF Core usa un default
-            // que puede truncar centavos en algunos motores.
+            // Precisión decimal para no truncar centavos.
             builder.Property(w => w.TotalBalance).HasPrecision(12, 2);
             builder.Property(w => w.HeldBalance).HasPrecision(12, 2);
 
-            // Esto es EL detalle técnico de Optimistic Locking.
-            // Le dice a EF Core: "esta columna la maneja SQL Server solo,
-            // y usala para saber si alguien más modificó la fila
-            // entre que la leí y la quiero guardar".
+            // Optimistic locking: la columna de versión la maneja SQL Server.
             builder.Property(w => w.RowVersion).IsRowVersion();
 
-            // La relación 1:1 con User.
+            // Relación 1:1 con User.
             builder.HasOne(w => w.User)
                    .WithOne()
                    .HasForeignKey<Wallet>(w => w.UserId);
 
-            // Este índice único es lo que IMPIDE que un mismo User
-            // termine con dos Wallets. Sin esto, la FK sola permitiría
-            // varias filas con el mismo UserId.
+            // Índice único: cada usuario tiene una sola wallet.
             builder.HasIndex(w => w.UserId).IsUnique();
         }
     }

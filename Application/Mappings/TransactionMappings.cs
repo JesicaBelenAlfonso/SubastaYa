@@ -11,7 +11,7 @@ namespace SubastaYa.Application.Mappings
             {
                 Id = t.Id,
                 WalletId = t.WalletId,
-                Type = t.Type,
+                Type = t.Type.ToString().ToUpperInvariant(),
                 Amount = t.Amount,
                 Date = t.Date,
                 AuctionId = t.AuctionId

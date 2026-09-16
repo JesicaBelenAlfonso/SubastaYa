@@ -13,13 +13,13 @@ namespace SubastaYa.Application.Services
             _audits = audits;
         }
 
-        public async Task LogAsync(string entity, int entityId, string action, int userId, object? detail = null)
+        public async Task LogAsync(string entity, int entityId, AuditAction action, int userId, object? detail = null)
         {
             await _audits.AddAsync(new Audit
             {
                 Entity = entity,
                 EntityId = entityId,
-                Action = action,
+                Action = action.ToString(),
                 UserId = userId,
                 DetalleJson = detail is null
                     ? "{}"
