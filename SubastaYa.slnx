@@ -1,9 +1,5 @@
 <Solution>
-  <Folder Name="/Application/">
-    <Project Path="Application/SubastaYa.Application.csproj" />
-  </Folder>
-  <Folder Name="/Domain/" />
-  <Project Path="Aplication/SubastaYa.Application.csproj" />
+  <Project Path="Application/SubastaYa.Application.csproj" />
   <Project Path="Domain/SubastaYa.Domain.csproj" />
   <Project Path="Infrastructure/SubastaYa.Infrastructure.csproj" />
   <Project Path="SubastaYa/SubastaYa.csproj" />
