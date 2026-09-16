@@ -30,6 +30,9 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
             if (cmd.MinIncrement <= 0)
                 throw new DomainException("El incremento mínimo debe ser mayor a 0");
 
+            if (cmd.MinIncrement > cmd.BasePrice)
+                throw new DomainException("El incremento mínimo no puede ser mayor al precio base");
+
             var auction = cmd.ToEntity(cmd.SellerId);
 
             await _auctions.AddAsync(auction);
