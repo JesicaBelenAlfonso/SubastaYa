@@ -5,6 +5,7 @@ using SubastaYa.Application.Mappings;
 using SubastaYa.Application.UseCases.Bids.Commands;
 using SubastaYa.Domain.Entities;
 using SubastaYa.Domain.Exceptions;
+using System;
 using System.Threading.Tasks;
 
 namespace SubastaYa.Application.UseCases.Bids.Handlers
@@ -157,16 +158,27 @@ namespace SubastaYa.Application.UseCases.Bids.Handlers
                 bid.Amount
             });
 
+            // --- TRANSACCIONALIDAD ATÓMICA (ACID) ---
+            await _uow.BeginTransactionAsync();
+
             try
             {
                 await _uow.SaveChangesAsync();
+                await _uow.CommitAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
+                await _uow.RollbackAsync();
+
                 // Se desanexa todo para guardar solo la auditoría de rechazo.
                 _uow.DetachAll();
 
                 await RejectAsync(cmd, auction, auction.Id, "Conflicto de concurrencia al registrar la puja");
+                throw;
+            }
+            catch (Exception)
+            {
+                await _uow.RollbackAsync();
                 throw;
             }
 
