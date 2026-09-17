@@ -3,20 +3,17 @@ const API_BASE = "http://localhost:5253/api/v1";
 const SESSION_KEY = "subastaya_session";
 
 const ESTADOS = {
-  ACTIVA: { label: "Activa", clase: "bg-success" },
-  PROXIMA: { label: "Próxima", clase: "bg-secondary" },
-  FINALIZADA: { label: "Finalizada", clase: "bg-danger" },
-  DESIERTA: { label: "Desierta", clase: "bg-dark" },
+  Activa: { label: "Activa", clase: "bg-success" },
+  Proxima: { label: "Próxima", clase: "bg-secondary" },
+  Finalizada: { label: "Finalizada", clase: "bg-danger" },
 };
 
 function normalizarEstado(estado, inicio, fin) {
-  const n = String(estado ?? "").toUpperCase().trim();
-  if (ESTADOS[n]) return n;
-  // Fallback: si el backend manda un valor raro (o null), se deduce de las fechas.
+  if (estado === "Activa" || estado === "Proxima" || estado === "Finalizada") return estado;
   const ahora = new Date();
-  if (fin && new Date(fin) <= ahora) return "FINALIZADA";
-  if (inicio && new Date(inicio) > ahora) return "PROXIMA";
-  return "ACTIVA";
+  if (estado === "Pending" || new Date(inicio) > ahora) return "Proxima";
+  if (estado === "Active") return "Activa";
+  return "Finalizada";
 }
 
 function normalizarSubasta(a) {
@@ -26,32 +23,13 @@ function normalizarSubasta(a) {
     descripcion: a.descripcion,
     urlImagen: a.urlImagen || `https://picsum.photos/seed/subasta${a.id}/600/400`,
     categoria: a.categoria || "General",
-    vendedorId: a.sellerId ?? null,
     precioBase: a.basePrice,
-    minIncremento: a.minIncrement,
     ofertaActual: a.ofertaActual ?? a.basePrice,
     cantidadPujas: a.cantidadPujas ?? 0,
     fechaInicio: a.startDate,
     fechaFin: a.endDate,
     estado: normalizarEstado(a.status, a.startDate, a.endDate),
   };
-}
-
-// Respaldo offline en el catálogo, controlado con una variable explícita.
-// Los datos de ejemplo se regeneran en cada llamada para que contadores y
-// estados sigan siendo coherentes con "ahora" mientras la API esté caída.
-const USE_MOCK_FALLBACK = true;
-
-function mockSubastas() {
-  const ahora = new Date();
-  const dias = (n) => new Date(ahora.getTime() + n * 86400000);
-  const horas = (n) => new Date(ahora.getTime() + n * 3600000);
-  return [
-    { id: 1, titulo: "Notebook Gamer RTX 16GB", descripcion: "Demo sin conexión: subasta en curso.", urlImagen: "https://picsum.photos/seed/notebook/600/400", categoria: "Electrónica", precioBase: 40000, ofertaActual: 45000, cantidadPujas: 2, fechaInicio: horas(-2), fechaFin: dias(2), estado: "ACTIVA" },
-    { id: 2, titulo: "Figura de colección edición limitada", descripcion: "Demo sin conexión: comienza mañana.", urlImagen: "https://picsum.photos/seed/figura/600/400", categoria: "Coleccionables", precioBase: 15000, ofertaActual: null, cantidadPujas: 0, fechaInicio: horas(24), fechaFin: dias(3), estado: "PROXIMA" },
-    { id: 3, titulo: "Juego de living de roble", descripcion: "Demo sin conexión: finalizada con ganador.", urlImagen: "https://picsum.photos/seed/living/600/400", categoria: "Hogar", precioBase: 50000, ofertaActual: 60000, cantidadPujas: 1, fechaInicio: horas(-120), fechaFin: horas(-1), estado: "FINALIZADA" },
-    { id: 4, titulo: "Monitor 27'' 144Hz", descripcion: "Demo sin conexión: desierta, sin pujas.", urlImagen: "https://picsum.photos/seed/monitor/600/400", categoria: "Electrónica", precioBase: 80000, ofertaActual: null, cantidadPujas: 0, fechaInicio: horas(-120), fechaFin: horas(-2), estado: "DESIERTA" },
-  ];
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -61,31 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("billetera-app")) initBilletera();
   if (document.getElementById("estado-api")) verificarAPI();
   actualizarNav();
-  mostrarAvisoSinConexion();
 });
-
-async function mostrarAvisoSinConexion() {
-  const aviso = document.getElementById("alerta-sin-conexion");
-  if (!aviso) return;
-  if (!new URLSearchParams(location.search).get("sin-conexion")) return;
-
-  // Solo se muestra el aviso si la API sigue caída. Si responde, se limpia el
-  // parámetro y el usuario entra con normalidad a su sesión.
-  const ctrl = new AbortController();
-  const tiempo = setTimeout(() => ctrl.abort(), 4000);
-  try {
-    const res = await fetch(`${API_BASE}/users/1/wallets`, { signal: ctrl.signal });
-    if (res.ok) {
-      history.replaceState(null, "", location.pathname);
-      return;
-    }
-  } catch {
-    // sigue abajo: se muestra el aviso
-  } finally {
-    clearTimeout(tiempo);
-  }
-  aviso.classList.remove("d-none");
-}
 
 /* ============ Sesión ============ */
 function getSession() {
@@ -107,18 +61,13 @@ function cerrarSesion() {
 
 function actualizarNav() {
   const accion = document.getElementById("nav-accion");
-  const sesion = getSession();
-
-  // Links privados (Mis actividades, Mi billetera, Crear subasta): solo con sesión.
-  document.querySelectorAll("[data-solo-login]").forEach((el) => {
-    el.classList.toggle("d-none", !sesion);
-  });
-
   if (!accion) return;
+  const sesion = getSession();
   if (sesion) {
     accion.innerHTML = `
-      <span class="chip-usuario me-2"><i class="bi bi-person-circle me-1"></i>${sesion.name}</span>
-      <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()"><i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión</button>`;
+      <a class="btn btn-outline-light btn-sm me-2" href="billetera.html"><i class="bi bi-wallet2 me-1"></i>Mi billetera</a>
+      <span class="text-light me-2"><i class="bi bi-person-circle"></i> ${sesion.name}</span>
+      <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">Cerrar sesión</button>`;
   } else {
     accion.innerHTML =
       '<a class="btn btn-light btn-sm" href="acceder.html"><i class="bi bi-box-arrow-in-right me-1"></i>Acceder</a>';
@@ -128,17 +77,13 @@ function actualizarNav() {
 /* ============ Catálogo ============ */
 async function fetchSubastas() {
   try {
-    // Listado real desde la API.
+    // Listado real desde la API; si no responde, usamos el catálogo de ejemplo.
     const res = await fetch(`${API_BASE}/auctions`);
     if (!res.ok) throw new Error("sin respuesta");
     const data = await res.json();
     return data.map(normalizarSubasta);
   } catch {
-    // Respaldo solo si la variable lo habilita; el aviso oculta el modo demo en la UI.
-    if (!USE_MOCK_FALLBACK) return [];
-    const aviso = document.getElementById("aviso-demo");
-    if (aviso) aviso.classList.remove("d-none");
-    return mockSubastas().map(normalizarSubasta);
+    return MOCK_AUCTIONS;
   }
 }
 
@@ -155,10 +100,7 @@ function textoContador(subasta) {
   const inicio = new Date(subasta.fechaInicio);
   const ahora = new Date();
 
-  if (subasta.estado === "DESIERTA")
-    return { texto: "Desierta", clase: "finalizada" };
-
-  if (subasta.estado === "FINALIZADA" || fin <= ahora)
+  if (subasta.estado === "Finalizada" || fin <= ahora)
     return { texto: "Finalizada", clase: "finalizada" };
 
   if (inicio > ahora) {
@@ -179,12 +121,12 @@ function textoContador(subasta) {
   return { texto: `${dd}:${hh}:${mm}:${ss}`, clase: "" };
 }
 
-function cardSubasta(a, i) {
+function cardSubasta(a) {
   const estado = ESTADOS[a.estado] ?? { label: a.estado, clase: "bg-secondary" };
   const contador = textoContador(a);
   return `
     <div class="col" data-id="${a.id}">
-      <div class="card card-subasta h-100" style="animation-delay:${Math.min(i, 8) * 70}ms">
+      <div class="card card-subasta h-100">
         <div class="img-wrap position-relative">
           <img src="${a.urlImagen}" alt="${a.titulo}" loading="lazy" />
           <span class="position-absolute top-0 start-0 m-2 badge est-badge ${estado.clase}">${estado.label}</span>
@@ -203,41 +145,20 @@ function cardSubasta(a, i) {
           </div>
         </div>
         <div class="card-footer bg-white border-0">
-          <a class="btn btn-verde w-100" href="subasta.html?id=${a.id}">Ver sala de pujas</a>
+          <button class="btn btn-verde w-100" type="button">Ver detalles</button>
         </div>
       </div>
     </div>`;
 }
 
-const PASO_CATALOGO = 5;
-
-function renderSubastas() {
-  const lista = window.__filtradas.slice(0, window.__visibles);
+function renderSubastas(lista) {
   const grid = document.getElementById("grid-subastas");
   const vacio = document.getElementById("sin-resultados");
   const cantidad = document.getElementById("cantidad-resultados");
-  const verMasWrap = document.getElementById("ver-mas-wrap");
-  grid.innerHTML = lista.map((a, i) => cardSubasta(a, i)).join("");
-  vacio.classList.toggle("d-none", window.__filtradas.length > 0);
-  if (cantidad) {
-    const total = window.__filtradas.length;
-    if (window.__modoCatalogo === "destacadas") {
-      cantidad.textContent = `${total} subasta${total === 1 ? "" : "s"} destacada${total === 1 ? "" : "s"}`;
-    } else {
-      cantidad.textContent = `${total} remate${total === 1 ? "" : "s"}${total > PASO_CATALOGO ? ` (mostrando ${Math.min(window.__visibles, total)})` : ""}`;
-    }
-  }
-  if (verMasWrap) {
-    const inactivo =
-      window.__modoCatalogo === "destacadas" || window.__visibles >= window.__filtradas.length;
-    verMasWrap.classList.toggle("d-none", inactivo);
-  }
+  grid.innerHTML = lista.map(cardSubasta).join("");
+  vacio.classList.toggle("d-none", lista.length > 0);
+  if (cantidad) cantidad.textContent = `${lista.length} remate${lista.length === 1 ? "" : "s"}`;
   iniciarCountdowns(grid);
-}
-
-function mostrarMas() {
-  window.__visibles += PASO_CATALOGO;
-  renderSubastas();
 }
 
 function aplicarFiltros() {
@@ -272,9 +193,7 @@ function aplicarFiltros() {
       lista.sort((a, b) => new Date(b.fechaInicio) - new Date(a.fechaInicio));
   }
 
-  window.__filtradas = lista;
-  window.__visibles = PASO_CATALOGO;
-  renderSubastas();
+  renderSubastas(lista);
 }
 
 function iniciarCountdowns(contenedor) {
@@ -309,53 +228,22 @@ function cargarCategorias() {
 
 async function initCatalogo() {
   window.__subastas = await fetchSubastas();
-  const esCatalogoCompleto = Boolean(document.getElementById("f-condicion"));
+  cargarCategorias();
+  aplicarFiltros();
 
-  if (esCatalogoCompleto) {
-    window.__modoCatalogo = "completo";
-    cargarCategorias();
-    aplicarFiltros();
-
-    ["f-condicion", "f-categoria", "f-min", "f-max", "f-orden", "f-buscar"].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener("input", aplicarFiltros);
-    });
-
-    const btnVerMas = document.getElementById("btn-ver-mas");
-    if (btnVerMas) btnVerMas.addEventListener("click", mostrarMas);
-    return;
-  }
-
-  // Index: solo 5 destacadas (activas/próximas por orden de cierre).
-  window.__modoCatalogo = "destacadas";
-  const destacadas = window.__subastas
-    .filter((a) => a.estado === "ACTIVA" || a.estado === "PROXIMA")
-    .sort((a, b) => new Date(a.fechaFin) - new Date(b.fechaFin))
-    .slice(0, PASO_CATALOGO);
-  window.__filtradas = destacadas;
-  window.__visibles = PASO_CATALOGO;
-  renderSubastas();
-}
-
-function esErrorDeConexion(err) {
-  return (
-    err instanceof TypeError ||
-    /failed to fetch|networkerror|load failed|fetch/i.test(err.message ?? "")
-  );
+  ["f-condicion", "f-categoria", "f-min", "f-max", "f-orden", "f-buscar"].forEach((id) => {
+    document.getElementById(id).addEventListener("input", aplicarFiltros);
+  });
 }
 
 function mensajeDeError(err) {
-  if (esErrorDeConexion(err)) {
+  if (
+    err instanceof TypeError ||
+    /failed to fetch|networkerror|load failed|fetch/i.test(err.message ?? "")
+  ) {
     return "No se pudo conectar con el servidor. Revisá que la API esté corriendo (dotnet run --project SubastaYa) en http://localhost:5253";
   }
   return err.message || "Ocurrió un error inesperado.";
-}
-
-// Si la API no está disponible y la cuenta tiene sesión abierta, se cierra la
-// sesión y se redirige al login con un aviso.
-function cerrarSesionPorConexion() {
-  localStorage.removeItem(SESSION_KEY);
-  location.href = "acceder.html?sin-conexion=1";
 }
 
 async function verificarAPI() {
@@ -365,12 +253,12 @@ async function verificarAPI() {
   const tiempo = setTimeout(() => ctrl.abort(), 4000);
   try {
     const res = await fetch(`${API_BASE}/users/1/wallets`, { signal: ctrl.signal });
-    el.classList.remove("barra-conexion-checking");
-    el.classList.toggle("barra-conexion-ok", res.ok);
-    el.classList.toggle("barra-conexion-error", !res.ok);
+    el.innerHTML = `<i class="bi bi-check-circle me-1"></i>Servidor conectado (HTTP ${res.status})`;
+    el.className = "text-center small fw-semibold text-success";
   } catch {
-    el.classList.remove("barra-conexion-checking");
-    el.classList.add("barra-conexion-error");
+    el.innerHTML =
+      '<i class="bi bi-x-circle me-1"></i>Sin conexión con el servidor. ¿Está corriendo la API?';
+    el.className = "text-center small fw-semibold text-danger";
   } finally {
     clearTimeout(tiempo);
   }
@@ -490,8 +378,6 @@ const INFO_MOVIMIENTO = {
   RETIRO: { texto: "Retiro", clase: "bg-danger" },
   RETENCION: { texto: "Retención", clase: "bg-secondary" },
   LIBERACION: { texto: "Liberación", clase: "bg-warning text-dark" },
-  PAGO: { texto: "Pago de subasta", clase: "bg-danger" },
-  COBRO: { texto: "Cobro de subasta", clase: "bg-success" },
 };
 
 async function initBilletera() {
@@ -529,7 +415,6 @@ async function cargarBilletera() {
     document.getElementById("tot-congelado").textContent = formatearPrecio(b.heldBalance);
     document.getElementById("tot-total").textContent = formatearPrecio(b.totalBalance);
   } catch (err) {
-    if (esErrorDeConexion(err)) return cerrarSesionPorConexion();
     mostrarMensaje(mensajeDeError(err), true);
   } finally {
     document.getElementById("loader-billetera").classList.add("d-none");
@@ -550,7 +435,6 @@ async function cargarMovimientos() {
     vacio.classList.toggle("d-none", lista.length > 0);
     tbody.innerHTML = lista.map(filaMovimiento).join("");
   } catch (err) {
-    if (esErrorDeConexion(err)) return cerrarSesionPorConexion();
     mostrarMensaje(mensajeDeError(err), true);
   } finally {
     loader.classList.add("d-none");
@@ -559,7 +443,7 @@ async function cargarMovimientos() {
 
 function filaMovimiento(t) {
   const info = INFO_MOVIMIENTO[t.type] ?? { texto: t.type ?? "—", clase: "bg-secondary" };
-  const esEntrada = t.type === "DEPOSITO" || t.type === "LIBERACION" || t.type === "COBRO";
+  const esEntrada = t.type === "DEPOSITO" || t.type === "LIBERACION";
   const fecha = new Date(t.date).toLocaleString("es-AR", {
     day: "2-digit",
     month: "2-digit",
@@ -602,7 +486,6 @@ async function hacerMovimiento() {
     await cargarBilletera();
     await cargarMovimientos();
   } catch (err) {
-    if (esErrorDeConexion(err)) return cerrarSesionPorConexion();
     mostrarMensaje(mensajeDeError(err), true);
   } finally {
     btn.disabled = false;

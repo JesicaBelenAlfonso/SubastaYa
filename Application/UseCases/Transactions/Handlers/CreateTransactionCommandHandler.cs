@@ -12,18 +12,15 @@ namespace SubastaYa.Application.UseCases.Transactions.Handlers
         private readonly IWalletRepository _wallets;
         private readonly ITransactionRepository _transactions;
         private readonly IUnitOfWork _uow;
-        private readonly IAuditService _audit;
 
         public CreateTransactionCommandHandler(
             IWalletRepository wallets,
             ITransactionRepository transactions,
-            IUnitOfWork uow,
-            IAuditService audit)
+            IUnitOfWork uow)
         {
             _wallets = wallets;
             _transactions = transactions;
             _uow = uow;
-            _audit = audit;
         }
 
         public async Task<TransactionResponseDto> Handle(CreateTransactionCommand cmd)
@@ -31,62 +28,57 @@ namespace SubastaYa.Application.UseCases.Transactions.Handlers
             var wallet = await _wallets.GetByUserIdAsync(cmd.UserId)
                 ?? throw new NotFoundException("El usuario no tiene una billetera asociada");
 
-            if (!Enum.TryParse<TransactionType>(cmd.Type, true, out var tipo))
-                throw new DomainException("Tipo de movimiento no válido");
+            ApplyMovement(wallet, cmd);
 
-            ApplyMovement(wallet, tipo, cmd.Amount);
-
-            if (tipo == TransactionType.Deposito)
-            {
-                await _audit.LogAsync("Wallet", wallet.Id, AuditAction.WALLET_MANUAL_CREDIT, cmd.UserId, new
-                {
-                    walletId = wallet.Id,
-                    amount = cmd.Amount,
-                    newTotalBalance = wallet.TotalBalance
-                });
-            }
-            else if (tipo == TransactionType.Retiro)
-            {
-                await _audit.LogAsync("Wallet", wallet.Id, AuditAction.WALLET_WITHDRAWAL, cmd.UserId, new
-                {
-                    walletId = wallet.Id,
-                    amount = cmd.Amount,
-                    newTotalBalance = wallet.TotalBalance
-                });
-            }
-
-            // Ledger append-only: cada movimiento es una Transaction nueva.
+            // El ledger es append-only: cada movimiento se registra como una
+            // Transaction nueva, nunca se modifica ni se borra.
             var transaction = new Transaction
             {
                 WalletId = wallet.Id,
-                Type = tipo,
+                Type = cmd.Type,
                 Amount = cmd.Amount,
                 AuctionId = cmd.AuctionId,
                 Date = DateTime.UtcNow
             };
             await _transactions.AddAsync(transaction);
 
+            // Un solo SaveChanges: o se aplica el movimiento y se registra
+            // la Transaction, o no pasa nada (atómico).
             await _uow.SaveChangesAsync();
 
             return transaction.ToDto();
         }
 
-        private static void ApplyMovement(Wallet wallet, TransactionType tipo, decimal amount)
+        private static void ApplyMovement(Wallet wallet, CreateTransactionCommand cmd)
         {
-            // RETENCION/LIBERACION solo las ejecuta el sistema; la API no las acepta.
-            if (tipo == TransactionType.Retencion || tipo == TransactionType.Liberacion)
+            // La retención y la liberación las realiza el sistema al procesar
+            // una puja: exigen un AuctionId. El usuario solo puede depositar y retirar.
+            if ((cmd.Type == "RETENCION" || cmd.Type == "LIBERACION")
+                && cmd.AuctionId is null)
                 throw new DomainConflictException("La retención/liberación de saldo solo puede realizarla el sistema al procesar una puja");
 
-            switch (tipo)
+            switch (cmd.Type)
             {
-                case TransactionType.Deposito:
-                    wallet.TotalBalance += amount;
+                case "DEPOSITO":
+                    wallet.TotalBalance += cmd.Amount;
                     break;
 
-                case TransactionType.Retiro:
-                    if (amount > wallet.AvailableBalance)
+                case "RETIRO":
+                    if (cmd.Amount > wallet.AvailableBalance)
                         throw new DomainConflictException("Saldo disponible insuficiente para retirar");
-                    wallet.TotalBalance -= amount;
+                    wallet.TotalBalance -= cmd.Amount;
+                    break;
+
+                case "RETENCION":
+                    if (cmd.Amount > wallet.AvailableBalance)
+                        throw new DomainConflictException("Saldo disponible insuficiente para congelar");
+                    wallet.HeldBalance += cmd.Amount;
+                    break;
+
+                case "LIBERACION":
+                    if (cmd.Amount > wallet.HeldBalance)
+                        throw new DomainConflictException("El monto congelado no alcanza para liberar");
+                    wallet.HeldBalance -= cmd.Amount;
                     break;
 
                 default:

@@ -10,11 +10,13 @@ namespace SubastaYa.Domain.Entities
     {
         public int Id { get; set; }
         public int WalletId { get; set; }
-        public TransactionType Type { get; set; }
+        public string Type { get; set; } = string.Empty; // Ej: DEPOSITO, RETENCION, LIBERACION, PAGO, COBRO
         public decimal Amount { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
 
-        // AuctionId es opcional (ej.: recargas de saldo).
+        //no todas las transacciones están atadas directamente a una subasta
+        //(por ejemplo, las recargas de saldo iniciales en la billetera).
+
         public int? AuctionId { get; set; }
 
         public Transaction() { }

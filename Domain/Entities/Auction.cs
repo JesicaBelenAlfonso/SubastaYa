@@ -21,25 +21,12 @@ namespace SubastaYa.Domain.Entities
 
         public decimal BasePrice { get; set; }
 
-        public decimal MinIncrement { get; set; }
+        public decimal MinIncrement { get; set; } //minimo incremento de subasta
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        // Toca la subasta en cada puja (marca de actividad + RowVersion).
-        public DateTime? LastBidAt { get; set; }
-
-        public AuctionStatus Status { get; set; }
+        public string Status { get; set; } = null!;
         [Timestamp] public byte[] RowVersion { get; set; } = null!;
-
-        // Nace ACTIVA si ya empezó; los estados terminales no se revierten.
-        public void RefreshStatus(DateTime now)
-        {
-            if (Status == AuctionStatus.Proxima && StartDate <= now && EndDate > now)
-                Status = AuctionStatus.Activa;
-        }
-
-        public bool IsTerminal => Status.IsTerminal();
-
         public Auction() { 
 
 

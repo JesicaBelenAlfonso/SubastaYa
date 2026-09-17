@@ -26,11 +26,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navPrincipal">
         <ul class="navbar-nav me-auto ms-lg-4 gap-lg-2">
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#subastas">Subastas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#subastas">Subastas</a></li>
           <li class="nav-item"><a class="nav-link" href="#como-funciona">Cómo funciona</a></li>
-          <li class="nav-item" data-solo-login><a class="nav-link" href="crear-subasta.html"><i class="bi bi-plus-circle me-1"></i>Crear subasta</a></li>
-          <li class="nav-item" data-solo-login><a class="nav-link" href="mis-actividades.html"><i class="bi bi-list-check me-1"></i>Mis actividades</a></li>
-          <li class="nav-item" data-solo-login><a class="nav-link" href="billetera.html"><i class="bi bi-wallet2 me-1"></i>Mi billetera</a></li>
+          <li class="nav-item"><a class="nav-link" href="billetera.html">Mi billetera</a></li>
           <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
         </ul>
         <div class="d-flex align-items-center" id="nav-accion"></div>
@@ -75,29 +73,57 @@
     </div>
   </header>
 
-  <!-- Subastas destacadas -->
+  <!-- Filtros -->
   <section class="container py-4" id="subastas">
-    <div id="aviso-demo" class="alert alert-warning d-none" role="alert">
-      <i class="bi bi-info-circle me-1"></i>
-      <strong>Modo demo:</strong> la API no está respondiendo y estás viendo un catálogo de ejemplo con las subastas que genera el seeder.
+    <div class="filtros p-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-lg-2">
+          <label class="form-label" for="f-buscar">Buscar</label>
+          <input class="form-control" id="f-buscar" type="search" placeholder="Objeto, categoría..." />
+        </div>
+        <div class="col-lg-2">
+          <label class="form-label" for="f-condicion">Condición</label>
+          <select class="form-select" id="f-condicion">
+            <option value="">Todas</option>
+            <option value="Activa">Activas</option>
+            <option value="Proxima">Próximas</option>
+            <option value="Finalizada">Finalizadas</option>
+          </select>
+        </div>
+        <div class="col-lg-2">
+          <label class="form-label" for="f-categoria">Categoría</label>
+          <select class="form-select" id="f-categoria">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="col-lg-2">
+          <label class="form-label" for="f-min">Precio mín.</label>
+          <input class="form-control" id="f-min" type="number" min="0" placeholder="$0" />
+        </div>
+        <div class="col-lg-2">
+          <label class="form-label" for="f-max">Precio máx.</label>
+          <input class="form-control" id="f-max" type="number" min="0" placeholder="Sin tope" />
+        </div>
+        <div class="col-lg-2">
+          <label class="form-label" for="f-orden">Ordenar por</label>
+          <select class="form-select" id="f-orden">
+            <option value="recientes">Más recientes</option>
+            <option value="precio-desc">Mayor oferta</option>
+            <option value="precio-asc">Menor oferta</option>
+            <option value="final">Próximo a cerrar</option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <div class="d-flex align-items-center justify-content-between my-4">
-      <div>
-        <h2 class="seccion-titulo h3 mb-0">Subastas destacadas</h2>
-        <p class="text-muted small mb-0 mt-1"><i class="bi bi-lightning-charge me-1"></i>Los próximos remates por orden de cierre. Mirá el catálogo completo si querés filtrar.</p>
-      </div>
+      <h2 class="seccion-titulo h3 mb-0">Próximos remates</h2>
       <span class="text-muted small" id="cantidad-resultados"></span>
     </div>
     <div id="grid-subastas" class="row g-4"></div>
-    <div class="text-center mt-4">
-      <a class="btn btn-contorno-verde btn-lg" href="subastas.html">
-        <i class="bi bi-grid-3x3-gap me-1"></i>Ver más subastas
-      </a>
-    </div>
     <div id="sin-resultados" class="text-center py-5 d-none">
       <i class="bi bi-search display-4 text-muted"></i>
-      <p class="mt-3 fs-5">No hay subastas activas por el momento.</p>
+      <p class="mt-3 fs-5">No encontramos subastas con esos filtros.</p>
     </div>
   </section>
 

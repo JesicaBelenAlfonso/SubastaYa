@@ -8,11 +8,7 @@ namespace SubastaYa.Application.Interfaces
 {
     public interface IUnitOfWork
     {
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-        Task BeginTransactionAsync();
-        Task CommitAsync();
-        Task RollbackAsync();
-        void DetachAll();
+        Task<int> SaveChangesAsync(CancellationToken ct = default);
         void SetOriginalValue(object entity, string propertyName, object? value);
     }
 }

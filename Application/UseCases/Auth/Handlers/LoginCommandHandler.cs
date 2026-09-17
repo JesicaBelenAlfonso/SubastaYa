@@ -21,7 +21,8 @@ namespace SubastaYa.Application.UseCases.Auth.Handlers
         {
             var user = await _users.GetByEmailAsync(cmd.Email);
 
-            // Mismo mensaje para no filtrar qué emails están registrados.
+            // Mismo mensaje para usuario inexistente o contraseña incorrecta,
+            // para no filtrar qué emails están registrados.
             if (user is null || !_hasher.Verify(cmd.Password, user.PasswordHash))
                 throw new InvalidCredentialsException("Credenciales inválidas");
 

@@ -22,9 +22,6 @@ namespace SubastaYa.Infrastructure.Persistence.Configurations
 
             builder.Property(a => a.Status)
                    .HasMaxLength(50)
-                   .HasConversion(
-                       v => v.ToString().ToUpperInvariant(),
-                       v => Enum.Parse<AuctionStatus>(v, true))
                    .IsRequired();
 
             builder.Property(a => a.BasePrice)

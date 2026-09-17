@@ -8,6 +8,5 @@ namespace SubastaYa.Application.Interfaces
         Task<IEnumerable<Auction>> GetAllAsync();
         Task<Auction?> GetByIdAsync(int id);
         void Delete(Auction auction);
-        Task<IEnumerable<Auction>> GetExpiredActiveAsync(DateTime now);
     }
 }

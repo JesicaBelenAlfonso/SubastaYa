@@ -9,17 +9,10 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
     public class GetAuctionByIdQueryHandler
     {
         private readonly IAuctionRepository _auctions;
-        private readonly ICategoryRepository _categories;
-        private readonly IBidRepository _bids;
 
-        public GetAuctionByIdQueryHandler(
-            IAuctionRepository auctions,
-            ICategoryRepository categories,
-            IBidRepository bids)
+        public GetAuctionByIdQueryHandler(IAuctionRepository auctions)
         {
             _auctions = auctions;
-            _categories = categories;
-            _bids = bids;
         }
 
         public async Task<AuctionResponseDto?> Handle(GetAuctionByIdQuery query)
@@ -29,14 +22,7 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
             if (auction is null)
                 return null;
 
-            auction.RefreshStatus(DateTime.UtcNow);
-
-            var categoria = await _categories.GetByIdAsync(auction.CategoryId);
-
-            return auction.ToDto(
-                categoria?.Name,
-                await _bids.GetHighestAmountByAuctionIdAsync(auction.Id),
-                await _bids.GetCountByAuctionIdAsync(auction.Id));
+            return auction.ToDto();
         }
     }
 }

@@ -42,7 +42,9 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
             if (cmd.RowVersion is not null)
                 _uow.SetOriginalValue(auction, "RowVersion", cmd.RowVersion);
 
-            await _audit.LogAsync("Auction", auction.Id, AuditAction.UPDATE, auction.SellerId, new
+            await _uow.SaveChangesAsync();
+
+            await _audit.LogAsync("Auction", auction.Id, "UPDATE", auction.SellerId, new
             {
                 auction.Title,
                 auction.BasePrice,
@@ -50,8 +52,6 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
                 auction.StartDate,
                 auction.EndDate
             });
-
-            await _uow.SaveChangesAsync();
 
             return auction.ToDto();
         }

@@ -30,13 +30,11 @@
             </p>
           </div>
 
-          <div id="alerta-sin-conexion" class="alert alert-warning d-none">
-            <i class="bi bi-plug me-1"></i><strong>Sin conexión:</strong> no pudimos comunicarnos con el servidor y tu sesión se cerró. Volvé a ingresar cuando la API esté disponible.
-          </div>
-
           <div id="alert-login" class="alert alert-danger d-none"></div>
 
-          <div id="estado-api" class="barra-conexion barra-conexion-checking mb-4" role="status" aria-label="Estado de conexión con el servidor"></div>
+          <p id="estado-api" class="text-center small fw-semibold">
+            <span class="spinner-border spinner-border-sm me-1"></span>Verificando conexión con el servidor...
+          </p>
 
           <form id="form-login" novalidate>
             <div class="mb-3">

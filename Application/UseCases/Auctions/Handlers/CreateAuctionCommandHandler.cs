@@ -36,15 +36,14 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
             var auction = cmd.ToEntity(cmd.SellerId);
 
             await _auctions.AddAsync(auction);
+            await _uow.SaveChangesAsync();
 
-            await _audit.LogAsync("Auction", auction.Id, AuditAction.CREATE, cmd.SellerId, new
+            await _audit.LogAsync("Auction", auction.Id, "CREATE", cmd.SellerId, new
             {
                 auction.Title,
                 auction.BasePrice,
                 auction.CategoryId
             });
-
-            await _uow.SaveChangesAsync();
 
             return auction.ToDto();
         }
