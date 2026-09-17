@@ -1,0 +1,59 @@
+using SubastaYa.Domain.Entities;
+using SubastaYa.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using SubastaYa.Application.Interfaces;
+
+namespace SubastaYa.Infrastructure.Persistence.Repositories
+{
+    public class BidRepository : IBidRepository
+    {
+        private readonly AppDbContext _ctx;
+
+        public BidRepository(AppDbContext ctx)
+        {
+            _ctx = ctx;
+        }
+
+        public async Task AddAsync(Bid bid)
+        {
+            await _ctx.Bids.AddAsync(bid);
+        }
+
+        public async Task<decimal?> GetHighestAmountByAuctionIdAsync(int auctionId)
+        {
+            var hasBids = await _ctx.Bids.AnyAsync(b => b.AuctionId == auctionId);
+            if (!hasBids)
+                return null;
+
+            return await _ctx.Bids
+                .Where(b => b.AuctionId == auctionId)
+                .MaxAsync(b => b.Amount);
+        }
+        public async Task<Bid?> GetHighestBidByAuctionIdAsync(int auctionId)
+        {
+            return await _ctx.Bids
+                .Where(b => b.AuctionId == auctionId)
+                .OrderByDescending(b => b.Amount)
+                .ThenByDescending(b => b.BidDate)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<int> GetCountByAuctionIdAsync(int auctionId)
+        {
+            return await _ctx.Bids.CountAsync(b => b.AuctionId == auctionId);
+        }
+
+        public async Task<IEnumerable<Bid>> GetByAuctionIdAsync(int auctionId)
+        {
+            return await _ctx.Bids
+                .Where(b => b.AuctionId == auctionId)
+                .OrderBy(b => b.BidDate)
+                .ToListAsync();
+        }
+
+        public async Task<bool> HasBidAsync(int auctionId, int buyerId)
+        {
+            return await _ctx.Bids.AnyAsync(b => b.AuctionId == auctionId && b.BuyerId == buyerId);
+        }
+    }
+}
