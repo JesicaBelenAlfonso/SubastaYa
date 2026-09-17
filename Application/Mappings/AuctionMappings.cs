@@ -20,7 +20,10 @@ namespace SubastaYa.Application.Mappings
                 MinIncrement = dto.MinIncrement,
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
-                Status = "Pending",
+                // La subasta arranca ACTIVA si ya empezó; si no, PROXIMA.
+                Status = dto.StartDate <= DateTime.UtcNow
+                    ? AuctionStatus.Activa
+                    : AuctionStatus.Proxima,
             };
         }
 
@@ -42,7 +45,7 @@ namespace SubastaYa.Application.Mappings
                 MinIncrement = auction.MinIncrement,
                 StartDate = auction.StartDate,
                 EndDate = auction.EndDate,
-                Status = auction.Status,
+                Status = auction.Status.ToString().ToUpperInvariant(),
                 Categoria = categoria ?? "General",
                 OfertaActual = ofertaActual,
                 CantidadPujas = cantidadPujas,

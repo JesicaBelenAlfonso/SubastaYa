@@ -5,6 +5,15 @@ namespace SubastaYa.Application.Mappings
 {
     public static class CategoryMappings
     {
+        public static Category ToEntity(this CreateCategoryDto dto)
+        {
+            return new Category
+            {
+                Name = dto.Name,
+                UrlIcono = dto.UrlIcono
+            };
+        }
+
         public static CategoryResponseDto ToDto(this Category category)
         {
             return new CategoryResponseDto

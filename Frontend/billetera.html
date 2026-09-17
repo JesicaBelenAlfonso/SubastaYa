@@ -26,8 +26,10 @@
       </button>
       <div class="collapse navbar-collapse" id="navPrincipal">
         <ul class="navbar-nav me-auto ms-lg-4 gap-lg-2">
-          <li class="nav-item"><a class="nav-link" href="index.html">Subastas</a></li>
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="billetera.html">Mi billetera</a></li>
+          <li class="nav-item"><a class="nav-link" href="subastas.html">Subastas</a></li>
+          <li class="nav-item" data-solo-login><a class="nav-link" href="crear-subasta.html"><i class="bi bi-plus-circle me-1"></i>Crear subasta</a></li>
+          <li class="nav-item" data-solo-login><a class="nav-link" href="mis-actividades.html"><i class="bi bi-list-check me-1"></i>Mis actividades</a></li>
+          <li class="nav-item" data-solo-login><a class="nav-link active" aria-current="page" href="billetera.html"><i class="bi bi-wallet2 me-1"></i>Mi billetera</a></li>
         </ul>
         <div class="d-flex align-items-center" id="nav-accion"></div>
       </div>
@@ -40,7 +42,7 @@
         <h1 class="titulo-seccion mb-1">Mi billetera</h1>
         <p class="text-muted mb-0">Hola, <strong id="lbl-usuario">usuario</strong>. Administrá tu saldo para participar en los remates.</p>
       </div>
-      <a href="index.html" class="btn btn-verde mt-2 mt-sm-0"><i class="bi bi-hammer me-1"></i>Ver subastas</a>
+      <a href="subastas.html" class="btn btn-verde mt-2 mt-sm-0"><i class="bi bi-hammer me-1"></i>Ver subastas</a>
     </div>
 
     <div id="alerta-billetera" class="alert d-none" role="alert"></div>
