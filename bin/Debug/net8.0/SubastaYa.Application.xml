@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SubastaYa.Application</name>
+    </assembly>
+    <members>
+        <member name="T:SubastaYa.Application.DTOs.AuctionCatalogItem">
+            Subasta junto con los agregados de sus pujas (oferta actual y cantidad).
+        </member>
+        <member name="T:SubastaYa.Application.DTOs.BidHistoryResponseDto">
+            Entrada del historial de pujas de una subasta, anonimizada:
+            no expone quién es cada pujador, solo un rótulo neutro.
+        </member>
+        <member name="P:SubastaYa.Application.DTOs.BidHistoryResponseDto.BuyerLabel">
+            Rótulo anónimo del pujador (ej: "Pujador 2"). Nunca el nombre o id real.
+        </member>
+        <member name="P:SubastaYa.Application.DTOs.BidHistoryResponseDto.IsMine">
+            true si la puja pertenece al usuario que consulta (request erróneamente autorizado).
+        </member>
+        <member name="P:SubastaYa.Application.DTOs.BidHistoryResponseDto.IsLeader">
+            true si esta puja es la que lidera la subasta en este momento.
+        </member>
+        <member name="P:SubastaYa.Application.DTOs.BidResponseDto.SeExtendio">
+            True si la puja disparó la extensión anti-sniping del cierre.
+        </member>
+        <member name="P:SubastaYa.Application.DTOs.BidResponseDto.NuevaFechaFin">
+            Nueva fecha de cierre cuando la puja extendió la subasta; null si no hubo extensión.
+        </member>
+        <member name="T:SubastaYa.Application.DTOs.PagedAuctionsResponseDto">
+            Envelope del catálogo de subastas con su metadata de paginación.
+        </member>
+        <member name="T:SubastaYa.Application.DTOs.UserActivityResponseDto">
+            Actividad de un usuario sobre una subasta: la creó como vendedor o participó
+            como pujador (con indicador de si hoy está liderando).
+        </member>
+        <member name="P:SubastaYa.Application.DTOs.UserActivityResponseDto.Role">
+            VENDEDOR (la creó) o PUJADOR (participó)
+        </member>
+        <member name="P:SubastaYa.Application.DTOs.UserActivityResponseDto.Liderando">
+            true si el usuario es pujador y su puja es la vigente (líder)
+        </member>
+        <member name="P:SubastaYa.Application.DTOs.UserActivityResponseDto.ResultadoPuja">
+            Resultado de la puja para el usuario: GANADA (finalizó y era el líder),
+            SUPERADA (finalizó y no era el líder), EN_CURSO (aún no terminó) o DESIERTA (sin pujas).
+        </member>
+        <member name="T:SubastaYa.Application.UseCases.Auctions.Handlers.GetAuctionBidsQueryHandler">
+            <summary>
+            Historial de pujas de una subasta, anonimizado. El líder se calcula con el
+            monto más alto (la última puja que manda). No se expone ninguna identidad real.
+            </summary>
+        </member>
+        <member name="P:SubastaYa.Application.UseCases.Auctions.Queries.AuctionBidsQuery.UserId">
+            <summary>Id del usuario que consulta (opcional). Marca sus propias pujas con IsMine.</summary>
+        </member>
+        <member name="T:SubastaYa.Application.UseCases.Users.Handlers.GetUserActivitiesQueryHandler">
+            Actividades del usuario: subastas que publicó (VENDEDOR) y subastas donde pujó (PUJADOR,
+            marcando si su puja lidera y el resultado de su puja). Los estados se reflejan al instante
+            igual que en el catálogo.
+        </member>
+    </members>
+</doc>
