@@ -5,12 +5,15 @@ using SubastaYa.Application.Mappings;
 using SubastaYa.Application.UseCases.Bids.Commands;
 using SubastaYa.Domain.Entities;
 using SubastaYa.Domain.Exceptions;
+using System.Reflection.Metadata;
+using System.Reflection.Metadata.Server;
 using System.Threading.Tasks;
 
 namespace SubastaYa.Application.UseCases.Bids.Handlers
 {
     public class CreateBidCommandHandler
     {
+        private readonly AppDbContext _ctx;
         private readonly IAuctionRepository _auctions;
         private readonly IBidRepository _bids;
         private readonly IWalletRepository _wallets;
@@ -20,6 +23,7 @@ namespace SubastaYa.Application.UseCases.Bids.Handlers
         private readonly AuctionOptions _options;
 
         public CreateBidCommandHandler(
+            AppDbContext ctx,
             IAuctionRepository auctions,
             IBidRepository bids,
             IWalletRepository wallets,
@@ -28,6 +32,7 @@ namespace SubastaYa.Application.UseCases.Bids.Handlers
             IAuditService audit,
             AuctionOptions options)
         {
+            _ctx = ctx;
             _auctions = auctions;
             _bids = bids;
             _wallets = wallets;
@@ -41,143 +46,202 @@ namespace SubastaYa.Application.UseCases.Bids.Handlers
         {
             var now = DateTime.UtcNow;
 
-            var auction = await _auctions.GetByIdAsync(cmd.AuctionId);
-            if (auction is null)
-            {
-                // Se audita igual el intento, aunque el recurso no exista.
-                await RejectAsync(cmd, null, cmd.AuctionId, "No existe la subasta");
-                throw new NotFoundException($"No existe una subasta con Id {cmd.AuctionId}");
-            }
-
-            // Activación automática: si ya empezó, PROXIMA pasa a ACTIVA.
-            auction.RefreshStatus(now);
-
-            if (auction.Status != AuctionStatus.Activa)
-            {
-                await RejectAsync(cmd, auction, auction.Id, "La subasta no está activa");
-                throw new DomainConflictException("La subasta no está activa");
-            }
-
-            // El vendedor no puede pujar su propia subasta (evita pujas fantasma).
-            if (cmd.BuyerId == auction.SellerId)
-            {
-                await RejectAsync(cmd, auction, auction.Id, "El vendedor no puede pujar su propia subasta");
-                throw new DomainConflictException("No podés pujar tu propia subasta");
-            }
-
-            // Si el tiempo ya se agotó, se rechaza (el worker la finalizará).
-            var remaining = auction.EndDate - now;
-            if (remaining <= TimeSpan.Zero)
-            {
-                await RejectAsync(cmd, auction, auction.Id, "La subasta ya venció");
-                throw new DomainConflictException("La subasta ya venció");
-            }
-
-            // Monto mínimo requerido.
-            var previousLeader = await _bids.GetHighestBidByAuctionIdAsync(cmd.AuctionId);
-            var currentOffer = previousLeader?.Amount;
-            var minimum = currentOffer ?? auction.BasePrice;
-
-            // La puja debe ser al menos igual a (oferta actual + incremento mínimo oficial)
-            var requiredAmount = minimum + auction.MinIncrement;
-            if (cmd.Amount < requiredAmount)
-            {
-                var reference = currentOffer.HasValue ? "la oferta actual" : "el precio base";
-                await RejectAsync(cmd, auction, auction.Id, $"La puja debe ser mayor o igual a {reference} ({minimum}) + incremento mínimo ({auction.MinIncrement}) = {requiredAmount}");
-                throw new DomainException($"La puja debe ser mayor o igual a {reference} ({minimum}) + incremento mínimo ({auction.MinIncrement}) = {requiredAmount}");
-            }
-
-            // Wallet del pujador.
-            var wallet = await _wallets.GetByUserIdAsync(cmd.BuyerId);
-            if (wallet is null)
-            {
-                await RejectAsync(cmd, auction, auction.Id, "El usuario no tiene una billetera asociada");
-                throw new DomainException($"El usuario id {cmd.BuyerId} no tiene una billetera asociada");
-            }
-
-            // Si ya era el líder, solo cubre la diferencia (delta).
-            var alreadyHeld = previousLeader is not null && previousLeader.BuyerId == cmd.BuyerId
-                ? previousLeader.Amount
-                : 0m;
-
-            if (wallet.AvailableBalance + alreadyHeld < cmd.Amount)
-            {
-                await RejectAsync(cmd, auction, auction.Id, "Saldo disponible insuficiente");
-                throw new DomainConflictException($"Saldo disponible insuficiente para tu puja. Disponible: {wallet.AvailableBalance + alreadyHeld}, Requerido: {cmd.Amount}");
-            }
-
-            // --- Escrow ---
-
-            // 1) Liberamos la retención del líder anterior.
-            if (previousLeader is not null)
-            {
-                var previousWallet = previousLeader.BuyerId == cmd.BuyerId
-                    ? wallet
-                    : await _wallets.GetByUserIdAsync(previousLeader.BuyerId);
-
-                if (previousWallet is not null)
-                {
-                    previousWallet.HeldBalance -= previousLeader.Amount;
-
-                    await _transactions.AddAsync(new Transaction
-                    {
-                        WalletId = previousWallet.Id,
-                        Type = TransactionType.Liberacion,
-                        Amount = previousLeader.Amount,
-                        AuctionId = auction.Id,
-                        Date = now
-                    });
-                }
-            }
-
-            // 2) Retenemos el monto de la nueva puja ganadora.
-            wallet.HeldBalance += cmd.Amount;
-
-            await _transactions.AddAsync(new Transaction
-            {
-                WalletId = wallet.Id,
-                Type = TransactionType.Retencion,
-                Amount = cmd.Amount,
-                AuctionId = auction.Id,
-                Date = now
-            });
-
-            // 3) Anti-sniping: extiende el fin si la puja entra en la ventana crítica.
-            var extension = await ApplyAntiSniping(auction, cmd.BuyerId, remaining);
-
-            // Toca la subasta en cada puja (marca de actividad + RowVersion).
-            auction.LastBidAt = now;
-
-            var bid = cmd.ToEntity(cmd.BuyerId);
-            await _bids.AddAsync(bid);
-
-            await _audit.LogAsync("Bid", auction.Id, AuditAction.CREATE, cmd.BuyerId, new
-            {
-                bid.AuctionId,
-                bid.Amount
-            });
+            // BEGIN TRANSACTION: todo el flujo de puja está envuelto en una transacción nominada
+            var transaction = await _ctx.Database.BeginTransactionAsync();
 
             try
             {
-                await _uow.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                // Se desanexa todo para guardar solo la auditoría de rechazo.
-                _uow.DetachAll();
+                var auction = await _auctions.GetByIdAsync(cmd.AuctionId);
+                if (auction is null)
+                {
+                    transaction.Rollback();
+                    await _audit.LogAsync("Bid", cmd.AuctionId, AuditAction.BID_REJECTED, cmd.BuyerId, new
+                    {
+                        auctionId = cmd.AuctionId,
+                        amount = cmd.Amount,
+                        minimum = auction?.BasePrice,
+                        auctionStatus = "NOT_FOUND",
+                        reason = "No existe la subasta"
+                    });
+                    throw new NotFoundException($"No existe una subasta con Id {cmd.AuctionId}");
+                }
 
-                await RejectAsync(cmd, auction, auction.Id, "Conflicto de concurrencia al registrar la puja");
+                // Activación automática: si ya empezó, PROXIMA pasa a ACTIVA.
+                auction.RefreshStatus(now);
+
+                if (auction.Status != AuctionStatus.Activa)
+                {
+                    transaction.Rollback();
+                    await _audit.LogAsync("Bid", auction.Id, AuditAction.BID_REJECTED, cmd.BuyerId, new
+                    {
+                        auctionId = auction.Id,
+                        amount = cmd.Amount,
+                        minimum = await _bids.GetHighestAmountByAuctionIdAsync(auction.Id) ?? auction.BasePrice,
+                        auctionStatus = auction.Status.ToString().ToUpperInvariant(),
+                        reason = "La subasta no está activa"
+                    });
+                    throw new DomainConflictException("La subasta no está activa");
+                }
+
+                // El vendedor no puede pujar su propia subasta (evita pujas fantasma).
+                if (cmd.BuyerId == auction.SellerId)
+                {
+                    transaction.Rollback();
+                    await _audit.LogAsync("Bid", auction.Id, AuditAction.BID_REJECTED, cmd.BuyerId, new
+                    {
+                        auctionId = auction.Id,
+                        amount = cmd.Amount,
+                        minimum = await _bids.GetHighestAmountByAuctionIdAsync(auction.Id) ?? auction.BasePrice,
+                        auctionStatus = auction.Status.ToString().ToUpperInvariant(),
+                        reason = "El vendedor no puede pujar su propia subasta"
+                    });
+                    throw new DomainConflictException("No podés pujar tu propia subasta");
+                }
+
+                // Si el tiempo ya se agotó, se rechaza (el worker la finalizará).
+                var remaining = auction.EndDate - now;
+                if (remaining <= TimeSpan.Zero)
+                {
+                    transaction.Rollback();
+                    await _audit.LogAsync("Bid", auction.Id, AuditAction.BID_REJECTED, cmd.BuyerId, new
+                    {
+                        auctionId = auction.Id,
+                        amount = cmd.Amount,
+                        minimum = await _bids.GetHighestAmountByAuctionIdAsync(auction.Id) ?? auction.BasePrice,
+                        auctionStatus = auction.Status.ToString().ToUpperInvariant(),
+                        reason = "La subasta ya venció"
+                    });
+                    throw new DomainConflictException("La subasta ya venció");
+                }
+
+                // Monto mínimo requerido.
+                var previousLeader = await _bids.GetHighestBidByAuctionIdAsync(cmd.AuctionId);
+                var currentOffer = previousLeader?.Amount;
+                var minimum = currentOffer ?? auction.BasePrice;
+
+                // La puja debe ser al menos igual a (oferta actual + incremento mínimo oficial)
+                var requiredAmount = minimum + auction.MinIncrement;
+                if (cmd.Amount < requiredAmount)
+                {
+                    transaction.Rollback();
+                    await _audit.LogAsync("Bid", auction.Id, AuditAction.BID_REJECTED, cmd.BuyerId, new
+                    {
+                        auctionId = auction.Id,
+                        amount = cmd.Amount,
+                        minimum,
+                        auctionStatus = auction.Status.ToString().ToUpperInvariant(),
+                        reason = $"La puja debe ser mayor o igual a {reference} ({minimum}) + incremento mínimo ({auction.MinIncrement}) = {requiredAmount}"
+                    });
+                    throw new DomainException($"La puja debe ser mayor o igual a {reference} ({minimum}) + incremento mínimo ({auction.MinIncrement}) = {requiredAmount}");
+                }
+
+                // Wallet del pujador.
+                var wallet = await _wallets.GetByUserIdAsync(cmd.BuyerId);
+                if (wallet is null)
+                {
+                    transaction.Rollback();
+                    await _audit.LogAsync("Bid", auction.Id, AuditAction.BID_REJECTED, cmd.BuyerId, new
+                    {
+                        auctionId = auction.Id,
+                        amount = cmd.Amount,
+                        minimum = await _bids.GetHighestAmountByAuctionIdAsync(auction.Id) ?? auction.BasePrice,
+                        auctionStatus = auction.Status.ToString().ToUpperInvariant(),
+                        reason = "El usuario no tiene una billetera asociada"
+                    });
+                    throw new DomainException($"El usuario id {cmd.BuyerId} no tiene una billetera asociada");
+                }
+
+                // Si ya era el líder, solo cubre la diferencia (delta).
+                var alreadyHeld = previousLeader is not null && previousLeader.BuyerId == cmd.BuyerId
+                    ? previousLeader.Amount
+                    : 0m;
+
+                if (wallet.AvailableBalance + alreadyHeld < cmd.Amount)
+                {
+                    transaction.Rollback();
+                    await _audit.LogAsync("Bid", auction.Id, AuditAction.BID_REJECTED, cmd.BuyerId, new
+                    {
+                        auctionId = auction.Id,
+                        amount = cmd.Amount,
+                        minimum = await _bids.GetHighestAmountByAuctionIdAsync(auction.Id) ?? auction.BasePrice,
+                        auctionStatus = auction.Status.ToString().ToUpperInvariant(),
+                        reason = "Saldo disponible insuficiente"
+                    });
+                    throw new DomainConflictException($"Saldo disponible insuficiente para tu puja. Disponible: {wallet.AvailableBalance + alreadyHeld}, Requerido: {cmd.Amount}");
+                }
+
+                // --- Escrow ---
+
+                // 1) Liberamos la retención del líder anterior.
+                if (previousLeader is not null)
+                {
+                    var previousWallet = previousLeader.BuyerId == cmd.BuyerId
+                        ? wallet
+                        : await _wallets.GetByUserIdAsync(previousLeader.BuyerId);
+
+                    if (previousWallet is not null)
+                    {
+                        previousWallet.HeldBalance -= previousLeader.Amount;
+
+                        await _transactions.AddAsync(new Transaction
+                        {
+                            WalletId = previousWallet.Id,
+                            Type = TransactionType.Liberacion,
+                            Amount = previousLeader.Amount,
+                            AuctionId = auction.Id,
+                            Date = now
+                        });
+                    }
+                }
+
+                // 2) Retenemos el monto de la nueva puja ganadora.
+                wallet.HeldBalance += cmd.Amount;
+
+                await _transactions.AddAsync(new Transaction
+                {
+                    WalletId = wallet.Id,
+                    Type = TransactionType.Retencion,
+                    Amount = cmd.Amount,
+                    AuctionId = auction.Id,
+                    Date = now
+                });
+
+                // 3) Anti-sniping: extiende el fin si la puja entra en la ventana crítica.
+                var extension = await ApplyAntiSniping(auction, cmd.BuyerId, remaining);
+
+                // Toca la subasta en cada puja (marca de actividad + RowVersion).
+                auction.LastBidAt = now;
+
+                var bid = cmd.ToEntity(cmd.BuyerId);
+                await _bids.AddAsync(bid);
+
+                await _audit.LogAsync("Bid", auction.Id, AuditAction.CREATE, cmd.BuyerId, new
+                {
+                    bid.AuctionId,
+                    bid.Amount
+                });
+
+                // Guardar todos los cambios en una sola transacción atómica.
+                await _ctx.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                var response = bid.ToDto();
+                if (extension is not null)
+                {
+                    response.SeExtendio = true;
+                    response.NuevaFechaFin = auction.EndDate;
+                }
+
+                return response;
+            }
+            catch
+            {
+                // Si falla cualquier cosa, hacer rollback de la transacción.
+                // Los cambios parciales no se persisten.
+                await transaction.RollbackAsync();
                 throw;
             }
-
-            var response = bid.ToDto();
-            if (extension is not null)
-            {
-                response.SeExtendio = true;
-                response.NuevaFechaFin = auction.EndDate;
-            }
-
-            return response;
         }
 
         private async Task<TimeSpan?> ApplyAntiSniping(Auction auction, int bidderId, TimeSpan remaining)
@@ -201,28 +265,6 @@ namespace SubastaYa.Application.UseCases.Bids.Handlers
             }
 
             return null;
-        }
-
-        private async Task RejectAsync(CreateBidCommand cmd, Auction? auction, int auctionId, string reason)
-        {
-            try
-            {
-                // Best-effort: persistir la auditoría sin reintentar operaciones mutantes.
-                await _audit.LogAsync("Bid", auctionId, AuditAction.BID_REJECTED, cmd.BuyerId, new
-                {
-                    auctionId,
-                    amount = cmd.Amount,
-                    minimum = await _bids.GetHighestAmountByAuctionIdAsync(auctionId) ?? auction?.BasePrice,
-                    auctionStatus = auction?.Status.ToString().ToUpperInvariant(),
-                    reason
-                });
-
-                await _uow.SaveChangesAsync();
-            }
-            catch
-            {
-                // La auditoría es best-effort: no debe enmascarar el error original.
-            }
         }
     }
 }
