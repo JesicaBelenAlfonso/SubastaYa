@@ -8,9 +8,8 @@ using SubastaYa.Application.UseCases.Wallets.Queries;
 
 namespace SubastaYa.Api.Controllers
 {
-    /// <summary>
+   
     /// Movimientos de la billetera (ledger append-only): DEPOSITO, RETIRO y consulta.
-    /// </summary>
     [ApiController]
     [Route("api/v1/users/{userId}/wallets/transactions")]
     public class TransactionsController : ControllerBase
@@ -32,11 +31,11 @@ namespace SubastaYa.Api.Controllers
             _createTransaction = createTransaction;
         }
 
-        /// <summary>
+
         /// Historial de movimientos (ledger) de la billetera del usuario.
-        /// </summary>
-        /// <response code="200">Listado del ledger.</response>
-        /// <response code="404">El usuario no tiene billetera.</response>
+        /// 200 Listado del ledger.
+        /// 404 El usuario no tiene billetera.
+       
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<TransactionResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -47,11 +46,10 @@ namespace SubastaYa.Api.Controllers
             return Ok(dto);
         }
 
-        /// <summary>
+
         /// Devuelve un movimiento del ledger por su id.
-        /// </summary>
-        /// <response code="200">Movimiento encontrado.</response>
-        /// <response code="404">Movimiento inexistente.</response>
+        /// 200 Movimiento encontrado.
+        /// 404 Movimiento inexistente.
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(TransactionResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -61,14 +59,13 @@ namespace SubastaYa.Api.Controllers
             return Ok(dto);
         }
 
-        /// <summary>
+
         /// Registra un movimiento manual (DEPOSITO / RETIRO). La retención y liberación
         /// solo las genera el sistema al procesar una puja: aunque el cliente envíe un
         /// AuctionId, estos tipos son rechazados desde esta API abierta.
-        /// </summary>
-        /// <response code="201">Movimiento registrado.</response>
-        /// <response code="400">Tipo inválido o retiro mayor al saldo disponible.</response>
-        /// <response code="404">El usuario no tiene billetera.</response>
+        /// 201 Movimiento registrado.
+        /// 400 Tipo inválido o retiro mayor al saldo disponible.
+        /// 404 El usuario no tiene billetera.
         [HttpPost]
         [ProducesResponseType(typeof(TransactionResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

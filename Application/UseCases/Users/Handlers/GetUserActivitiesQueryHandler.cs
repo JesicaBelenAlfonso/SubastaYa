@@ -6,10 +6,8 @@ using SubastaYa.Domain.Exceptions;
 
 namespace SubastaYa.Application.UseCases.Users.Handlers
 {
-    /// <summary>
     /// Actividades del usuario: subastas que publicó (VENDEDOR) y subastas donde pujó (PUJADOR,
     /// marcando si su puja lidera). Los estados se reflejan al instante igual que en el catálogo.
-    /// </summary>
     public class GetUserActivitiesQueryHandler
     {
         private readonly IUserRepository _users;

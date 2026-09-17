@@ -5,9 +5,9 @@ using SubastaYa.Application.UseCases.Bids.Handlers;
 
 namespace SubastaYa.Api.Controllers
 {
-    /// <summary>
-    /// Pujas: el corazÃ³n de la subasta (escrow + anti-sniping).
-    /// </summary>
+
+    /// Pujas: el corazon de la subasta (escrow + anti-sniping).
+
     [ApiController]
     [Route("api/v1/bids")]
     public class BidsController : ControllerBase
@@ -19,13 +19,12 @@ namespace SubastaYa.Api.Controllers
             _createHandler = createHandler;
         }
 
-        /// <summary>
+
         /// Registra una puja sobre una subasta ACTIVA.
-        /// </summary>
-        /// <response code="201">Puja registrada.</response>
-        /// <response code="400">Monto invÃ¡lido.</response>
-        /// <response code="404">Subasta inexistente.</response>
-        /// <response code="409">Conflicto de estado o de concurrencia.</response>
+        /// 201 Created: La puja fue registrada correctamente.
+        /// 400 Bad Request: El monto de la puja es inválido (menor al mínimo o menor a la puja actual).
+        /// 404 Not Found: La subasta no existe.
+        /// 409 Conflict: La subasta no está en estado ACTIVA o la puja no pudo registrarse por un conflicto de concurrencia.
         [HttpPost]
         [ProducesResponseType(typeof(BidResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

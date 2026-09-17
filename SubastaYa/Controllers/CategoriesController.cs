@@ -6,9 +6,7 @@ using SubastaYa.Application.UseCases.Categories.Queries;
 
 namespace SubastaYa.Api.Controllers
 {
-    /// <summary>
-    /// CategorÃ­as del catÃ¡logo (ElectrÃ³nica, VehÃ­culos, Coleccionables, Hogar...).
-    /// </summary>
+    
     [ApiController]
     [Route("api/v1/categories")]
     public class CategoriesController : ControllerBase
@@ -27,11 +25,10 @@ namespace SubastaYa.Api.Controllers
             _getByIdHandler = getByIdHandler;
         }
 
-        /// <summary>
-        /// Crea una categorÃ­a.
-        /// </summary>
-        /// <response code="201">CategorÃ­a creada.</response>
-        /// <response code="400">Nombre invÃ¡lido o duplicado.</response>
+        /// Crea una categoria.
+        /// 201 Created: Categori­a creada.
+        /// 400 Bad Request: Nombre invalido o duplicado.
+  
         [HttpPost]
         [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -42,10 +39,9 @@ namespace SubastaYa.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
-        /// <summary>
-        /// Lista todas las categorÃ­as.
-        /// </summary>
-        /// <response code="200">Listado de categorÃ­as.</response>
+
+        /// Lista todas las categorias.
+        ///200 OK: Listado de categori­as.
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CategoryResponseDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
@@ -54,11 +50,10 @@ namespace SubastaYa.Api.Controllers
             return Ok(categories);
         }
 
-        /// <summary>
-        /// Devuelve una categorÃ­a por su id.
-        /// </summary>
-        /// <response code="200">CategorÃ­a encontrada.</response>
-        /// <response code="404">No existe la categorÃ­a.</response>
+        /// Devuelve una categori­a por su id.
+        /// 200 OK: Categoro­a encontrada.
+        /// 404 Not Found: No existe la categorÃ­a.
+    
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

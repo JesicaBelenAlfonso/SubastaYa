@@ -8,9 +8,7 @@ using SubastaYa.Application.UseCases.Users.Queries;
 
 namespace SubastaYa.Api.Controllers
 {
-    /// <summary>
     /// Usuarios: registro, consulta, actualización, baja y actividades.
-    /// </summary>
     [ApiController]
     [Route("api/v1/users")]
     public class UsersController : ControllerBase
@@ -31,11 +29,10 @@ namespace SubastaYa.Api.Controllers
             _getActivitiesHandler = getActivitiesHandler;
         }
 
-        /// <summary>
+
         /// Registra un nuevo usuario y le crea su billetera.
-        /// </summary>
-        /// <response code="201">Usuario registrado.</response>
-        /// <response code="400">Datos inválidos o email duplicado.</response>
+        /// 201: Usuario registrado. 400: Datos inválidos o email duplicado.
+   
         [HttpPost]
         [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -47,11 +44,8 @@ namespace SubastaYa.Api.Controllers
 
         }
 
-        /// <summary>
         /// Devuelve un usuario por su id.
-        /// </summary>
-        /// <response code="200">Usuario encontrado.</response>
-        /// <response code="404">No existe el usuario.</response>
+        /// 200: Usuario encontrado. 404: No existe el usuario.
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -64,11 +58,9 @@ namespace SubastaYa.Api.Controllers
                 : Ok(user);
         }
 
-        /// <summary>
+
         /// Actividades del usuario: subastas que publicó y subastas donde pujó.
-        /// </summary>
-        /// <response code="200">Listado de actividades.</response>
-        /// <response code="404">No existe el usuario.</response>
+        /// 200: Listado de actividades. 404: No existe el usuario.
         [HttpGet("{userId}/activities")]
         [ProducesResponseType(typeof(IEnumerable<UserActivityResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -78,11 +70,9 @@ namespace SubastaYa.Api.Controllers
             return Ok(activities);
         }
 
-        /// <summary>
+
         /// Actualiza los datos de un usuario.
-        /// </summary>
-        /// <response code="200">Usuario actualizado.</response>
-        /// <response code="404">No existe el usuario.</response>
+        /// 200: Usuario actualizado. 404: No existe el usuario.
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -94,11 +84,8 @@ namespace SubastaYa.Api.Controllers
             return Ok(result);
         }
 
-        /// <summary>
         /// Elimina un usuario.
-        /// </summary>
-        /// <response code="204">Usuario eliminado.</response>
-        /// <response code="404">No existe el usuario.</response>
+        /// 204: Usuario eliminado. 404: No existe el usuario.
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

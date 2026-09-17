@@ -5,9 +5,8 @@ using SubastaYa.Application.UseCases.Wallets.Queries;
 
 namespace SubastaYa.Api.Controllers
 {
-    /// <summary>
+    
     /// Billetera del usuario (saldo disponible, retenido y total).
-    /// </summary>
     [ApiController]
     [Route("api/v1/users/{userId}/wallets")]   // recurso anidado: la billetera pertenece a un usuario
     public class WalletsController : ControllerBase
@@ -19,11 +18,11 @@ namespace SubastaYa.Api.Controllers
             _getWallet = getWallet;
         }
 
-        /// <summary>
+
         /// Devuelve la billetera del usuario.
-        /// </summary>
-        /// <response code="200">Billetera encontrada.</response>
-        /// <response code="404">El usuario no tiene billetera.</response>
+        /// 200 OK: Devuelve la billetera del usuario.
+        /// 404 Not Found: El usuario no tiene una billetera asociada.
+     
         [HttpGet]
         [ProducesResponseType(typeof(WalletResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

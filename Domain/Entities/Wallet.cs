@@ -28,6 +28,13 @@ namespace SubastaYa.Domain.Entities
         public byte[] RowVersion { get; set; } = null!;
 
         public Wallet() { }
+
+        public static Wallet CreateFor(User user) => new Wallet
+        {
+            TotalBalance = 0,
+            HeldBalance = 0,
+            User = user
+        };
     }
 
 }
