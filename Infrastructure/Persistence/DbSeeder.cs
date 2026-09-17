@@ -8,7 +8,7 @@ namespace SubastaYa.Infrastructure.Persistence
     {
         public const string DefaultPassword = "Password123";
 
-        // Siembra los datos de prueba SOLO si la base estÃ¡ vacÃ­a (idempotente).
+        // Siembra los datos de prueba SOLO si la base está vacía (idempotente).
         public static async Task SeedAsync(AppDbContext ctx, IPasswordHasher hasher)
         {
             if (await ctx.Users.AnyAsync())
@@ -16,11 +16,11 @@ namespace SubastaYa.Infrastructure.Persistence
 
             var now = DateTime.UtcNow;
 
-            // ---------- 4 categorÃ­as ----------
+            // ---------- 4 categorías ----------
             var categorias = new[]
             {
-                new Category { Name = "ElectrÃ³nica", UrlIcono = "bi-phone" },
-                new Category { Name = "VehÃ­culos", UrlIcono = "bi-bicycle" },
+                new Category { Name = "Electrónica", UrlIcono = "bi-phone" },
+                new Category { Name = "Vehículos", UrlIcono = "bi-bicycle" },
                 new Category { Name = "Coleccionables", UrlIcono = "bi-stars" },
                 new Category { Name = "Hogar", UrlIcono = "bi-house-heart" },
             };
@@ -37,7 +37,7 @@ namespace SubastaYa.Infrastructure.Persistence
 
             var walletVendedor   = new Wallet { User = vendedor,   TotalBalance = 0m };
             var walletComprador1 = new Wallet { User = comprador1, TotalBalance = 200_000m };
-            // Comprador Dos es lÃ­der de A1 (retenciÃ³n 45.000) y ganador de A4 (retenciÃ³n 60.000).
+            // Comprador Dos es líder de A1 (retención 45.000) y ganador de A4 (retención 60.000).
             var walletComprador2 = new Wallet { User = comprador2, TotalBalance = 200_000m, HeldBalance = 105_000m };
             var walletSinFondos  = new Wallet { User = sinfondos,  TotalBalance = 500m };
 
@@ -49,9 +49,9 @@ namespace SubastaYa.Infrastructure.Persistence
             var a1 = new Auction
             {
                 SellerId = vendedor.Id,
-                CategoryId = catId["ElectrÃ³nica"],
+                CategoryId = catId["Electrónica"],
                 Title = "Notebook Gamer RTX 16GB",
-                Descripcion = "Notebook usada con garantÃ­a, impecable.",
+                Descripcion = "Notebook usada con garantía, impecable.",
                 UrlImagen = "https://picsum.photos/seed/notebook/600/400",
                 BasePrice = 40_000m,
                 MinIncrement = 5_000m,
@@ -63,7 +63,7 @@ namespace SubastaYa.Infrastructure.Persistence
             var a2 = new Auction
             {
                 SellerId = vendedor.Id,
-                CategoryId = catId["VehÃ­culos"],
+                CategoryId = catId["Vehículos"],
                 Title = "Bicicleta Mountain Bike 29",
                 Descripcion = "Ideal para probar el anti-sniping: termina en menos de 2 minutos.",
                 UrlImagen = "https://picsum.photos/seed/bici/600/400",
@@ -78,8 +78,8 @@ namespace SubastaYa.Infrastructure.Persistence
             {
                 SellerId = vendedor.Id,
                 CategoryId = catId["Coleccionables"],
-                Title = "Figura de colecciÃ³n ediciÃ³n limitada",
-                Descripcion = "Comienza maÃ±ana: visible como PRÃ“XIMA.",
+                Title = "Figura de colección edición limitada",
+                Descripcion = "Comienza mañana: visible como PRÓXIMA.",
                 UrlImagen = "https://picsum.photos/seed/figura/600/400",
                 BasePrice = 15_000m,
                 MinIncrement = 1_000m,
@@ -105,7 +105,7 @@ namespace SubastaYa.Infrastructure.Persistence
             var a5 = new Auction
             {
                 SellerId = vendedor.Id,
-                CategoryId = catId["ElectrÃ³nica"],
+                CategoryId = catId["Electrónica"],
                 Title = "Monitor 27'' 144Hz",
                 Descripcion = "Vencida sin pujas: pasa a DESIERTA con el worker.",
                 UrlImagen = "https://picsum.photos/seed/monitor/600/400",
@@ -120,7 +120,7 @@ namespace SubastaYa.Infrastructure.Persistence
             await ctx.SaveChangesAsync();
 
             // ---------- Pujas ----------
-            // A1 (estÃ¡ndar): 2 pujas, lÃ­der Comprador Dos con 45.000
+            // A1 (estándar): 2 pujas, líder Comprador Dos con 45.000
             ctx.Bids.AddRange(
                 new Bid { BuyerId = comprador1.Id, AuctionId = a1.Id, Amount = 40_000m, BidDate = now.AddMinutes(-90) },
                 new Bid { BuyerId = comprador2.Id, AuctionId = a1.Id, Amount = 45_000m, BidDate = now.AddMinutes(-60) });
@@ -132,19 +132,19 @@ namespace SubastaYa.Infrastructure.Persistence
 
             // ---------- Ledger coherente con las wallets ----------
             ctx.Transactions.AddRange(
-                // DepÃ³sitos iniciales
+                // Depósitos iniciales
                 new Transaction { WalletId = walletComprador1.Id, Type = TransactionType.Deposito, Amount = 200_000m, AuctionId = null, Date = now.AddDays(-10) },
                 new Transaction { WalletId = walletComprador2.Id, Type = TransactionType.Deposito, Amount = 200_000m, AuctionId = null, Date = now.AddDays(-10) },
                 new Transaction { WalletId = walletSinFondos.Id, Type = TransactionType.Deposito, Amount = 500m,      AuctionId = null, Date = now.AddDays(-10) },
 
-                // A1: Comprador Uno puja 40.000 (retenciÃ³n) y es superado (liberaciÃ³n)
+                // A1: Comprador Uno puja 40.000 (retención) y es superado (liberación)
                 new Transaction { WalletId = walletComprador1.Id, Type = TransactionType.Retencion,  Amount = 40_000m, AuctionId = a1.Id, Date = now.AddMinutes(-90) },
                 new Transaction { WalletId = walletComprador1.Id, Type = TransactionType.Liberacion, Amount = 40_000m, AuctionId = a1.Id, Date = now.AddMinutes(-60) },
 
-                // A1: Comprador Dos queda lÃ­der con 45.000 (retenciÃ³n vigente)
+                // A1: Comprador Dos queda líder con 45.000 (retención vigente)
                 new Transaction { WalletId = walletComprador2.Id, Type = TransactionType.Retencion, Amount = 45_000m, AuctionId = a1.Id, Date = now.AddMinutes(-60) },
 
-                // A4: Comprador Dos gana con 60.000 (retenciÃ³n vigente, el worker la liquida)
+                // A4: Comprador Dos gana con 60.000 (retención vigente, el worker la liquida)
                 new Transaction { WalletId = walletComprador2.Id, Type = TransactionType.Retencion, Amount = 60_000m, AuctionId = a4.Id, Date = now.AddDays(-2) });
 
             await ctx.SaveChangesAsync();

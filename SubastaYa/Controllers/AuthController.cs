@@ -6,7 +6,7 @@ using SubastaYa.Application.UseCases.Auth.Handlers;
 namespace SubastaYa.Api.Controllers
 {
     /// <summary>
-    /// AutenticaciÃ³n de usuarios.
+    /// Autenticación de usuarios.
     /// </summary>
     [ApiController]
     [Route("api/v1/auth")]
@@ -20,18 +20,30 @@ namespace SubastaYa.Api.Controllers
         }
 
         /// <summary>
-        /// Inicia sesiÃ³n (crea una "sesiÃ³n") con email y contraseÃ±a.
+        /// Inicia sesión (crea una "sesión") con email y contraseña.
         /// </summary>
-        /// <response code="201">SesiÃ³n creada (usuario autenticado).</response>
-        /// <response code="401">Credenciales invÃ¡lidas.</response>
+        /// <response code="200">Sesión iniciada correctamente.</response>
+        /// <response code="401">Credenciales inválidas o cuenta no encontrada.</response>
+        /// <response code="400">Datos de entrada inválidos.</response>
         [HttpPost("sessions")]
-        [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login(LoginCommand cmd)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var user = await _loginHandler.Handle(cmd);
 
-            return StatusCode(StatusCodes.Status201Created, user);
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(user);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace SubastaYa.Api.Controllers
 {
     
     /// Auditoria (AuditLog): traza de alta confianza de las operaciones del sistema.
+    /// Proporciona un registro immutable de eventos del sistema para compliance y debugging.
    
     [ApiController]
     [Route("api/v1/audits")]
@@ -19,14 +20,20 @@ namespace SubastaYa.Api.Controllers
             _handler = handler;
         }
 
-
         /// Lista los eventos de auditoría, filtrable por entidad y/o acción.
-        /// 200 OK: Listado de auditoría (más recientes primero).
+        /// <response code="200">Se devolvió el listado de eventos.</response>
+        /// <response code="400">Parámetros de filtro inválidos.</response>
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<AuditResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAll([FromQuery] string? entity, [FromQuery] string? action)
         {
+            if (string.IsNullOrWhiteSpace(entity) && string.IsNullOrWhiteSpace(action))
+            {
+                return BadRequest("Se requiere al menos un parámetro de filtro (entity o action).");
+            }
+
             var audits = await _handler.Handle(new GetAuditsQuery(entity, action));
             return Ok(audits);
         }

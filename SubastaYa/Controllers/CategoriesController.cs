@@ -25,10 +25,10 @@ namespace SubastaYa.Api.Controllers
             _getByIdHandler = getByIdHandler;
         }
 
-        /// Crea una categoria.
-        /// 201 Created: Categori­a creada.
-        /// 400 Bad Request: Nombre invalido o duplicado.
-  
+        /// Crea una categoría.
+        /// 201 Created: Categoría creada.
+        /// 400 Bad Request: Nombre inválido o duplicado.
+      
         [HttpPost]
         [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -40,8 +40,8 @@ namespace SubastaYa.Api.Controllers
         }
 
 
-        /// Lista todas las categorias.
-        ///200 OK: Listado de categori­as.
+        /// Lista todas las categorías.
+        ///200 OK: Listado de categorías.
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CategoryResponseDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
@@ -50,9 +50,9 @@ namespace SubastaYa.Api.Controllers
             return Ok(categories);
         }
 
-        /// Devuelve una categori­a por su id.
-        /// 200 OK: Categoro­a encontrada.
-        /// 404 Not Found: No existe la categorÃ­a.
+        /// Devuelve una categoría por su id.
+        /// 200 OK: Categoría encontrada.
+        /// 404 Not Found: No existe la categoría.
     
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status200OK)]
