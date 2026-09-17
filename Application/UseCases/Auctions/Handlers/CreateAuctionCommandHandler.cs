@@ -9,12 +9,18 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
     public class CreateAuctionCommandHandler
     {
         private readonly IAuctionRepository _auctions;
+        private readonly ICategoryRepository _categories;
         private readonly IUnitOfWork _uow;
         private readonly IAuditService _audit;
 
-        public CreateAuctionCommandHandler(IAuctionRepository auctions, IUnitOfWork uow, IAuditService audit)
+        public CreateAuctionCommandHandler(
+            IAuctionRepository auctions,
+            ICategoryRepository categories,
+            IUnitOfWork uow,
+            IAuditService audit)
         {
             _auctions = auctions;
+            _categories = categories;
             _uow = uow;
             _audit = audit;
         }
@@ -32,6 +38,10 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
 
             if (cmd.MinIncrement > cmd.BasePrice)
                 throw new DomainException("El incremento mínimo no puede ser mayor al precio base");
+
+            // Evita el 500 por FK: la categoría debe existir.
+            if (await _categories.GetByIdAsync(cmd.CategoryId) is null)
+                throw new DomainException($"No existe una categoría con Id {cmd.CategoryId}");
 
             var auction = cmd.ToEntity(cmd.SellerId);
 

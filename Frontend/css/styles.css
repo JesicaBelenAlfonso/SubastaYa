@@ -246,6 +246,21 @@ body {
   background-color: #f3e2e2;
   color: #a03a2e;
 }
+.contador.urgente {
+  background-color: #a03a2e;
+  color: #fff;
+  animation: pulso 1s infinite;
+}
+
+@keyframes pulso {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
 
 /* ===== Cómo funciona ===== */
 .paso {

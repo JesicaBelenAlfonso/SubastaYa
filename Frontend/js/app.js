@@ -11,9 +11,13 @@ const ESTADOS = {
 
 function normalizarEstado(estado, inicio, fin) {
   const n = String(estado ?? "").toUpperCase().trim();
+  const ahora = new Date();
+  // Badge terminal transitorio: si la API todavía reporta ACTIVA pero el cierre
+  // ya pasó, se muestra FINALIZADA en el cliente. No se toca el seed (el worker
+  // de liquidación resolverá el estado real); solo se elimina la inconsistencia visual.
+  if (n === "ACTIVA" && fin && new Date(fin) <= ahora) return "FINALIZADA";
   if (ESTADOS[n]) return n;
   // Fallback: si el backend manda un valor raro (o null), se deduce de las fechas.
-  const ahora = new Date();
   if (fin && new Date(fin) <= ahora) return "FINALIZADA";
   if (inicio && new Date(inicio) > ahora) return "PROXIMA";
   return "ACTIVA";
@@ -126,19 +130,56 @@ function actualizarNav() {
 }
 
 /* ============ Catálogo ============ */
-async function fetchSubastas() {
+function adjuntarMeta(lista, meta) {
+  if (meta) lista.meta = meta;
+  return lista;
+}
+
+async function fetchSubastas(params = {}) {
   try {
-    // Listado real desde la API.
-    const res = await fetch(`${API_BASE}/auctions`);
+    // Listado real desde la API: arma el query string y parsea el envelope.
+    const qs = new URLSearchParams();
+    if (params.estado) qs.set("estado", params.estado);
+    if (params.categoriaId) qs.set("categoriaId", params.categoriaId);
+    if (params.min && Number.isFinite(params.min)) qs.set("minPrecio", params.min);
+    if (params.max && Number.isFinite(params.max)) qs.set("maxPrecio", params.max);
+    if (params.orden) qs.set("orden", params.orden);
+    if (params.pagina && params.pagina > 1) qs.set("pagina", params.pagina);
+
+    // Con cualquier filtro o paginación se pide el envelope { items, pagina,
+    // tamano, total, totalPaginas }. La API solo devuelve el array plano cuando
+    // llega sin query string (compat para el index de destacadas).
+    const paginado = Object.keys(params).some((k) => params[k] !== undefined && params[k] !== null);
+    if (paginado) qs.set("tamano", params.tamano || TAMANO_CATALOGO);
+
+    const q = qs.toString();
+    const res = await fetch(`${API_BASE}/auctions${q ? `?${q}` : ""}`);
     if (!res.ok) throw new Error("sin respuesta");
     const data = await res.json();
-    return data.map(normalizarSubasta);
+
+    const envelope = data && !Array.isArray(data) && Array.isArray(data.items);
+    const items = envelope ? data.items : data;
+    const lista = adjuntarMeta((items || []).map(normalizarSubasta), envelope
+      ? {
+          pagina: data.pagina ?? 1,
+          tamano: data.tamano ?? (items || []).length,
+          total: data.total ?? (items || []).length,
+          totalPaginas: data.totalPaginas ?? 1,
+        }
+      : null);
+    return lista;
   } catch {
     // Respaldo solo si la variable lo habilita; el aviso oculta el modo demo en la UI.
     if (!USE_MOCK_FALLBACK) return [];
     const aviso = document.getElementById("aviso-demo");
     if (aviso) aviso.classList.remove("d-none");
-    return mockSubastas().map(normalizarSubasta);
+    const lista = mockSubastas().map(normalizarSubasta);
+    return adjuntarMeta(lista, {
+      pagina: params.pagina || 1,
+      tamano: params.tamano || TAMANO_CATALOGO,
+      total: lista.length,
+      totalPaginas: 1,
+    });
   }
 }
 
@@ -167,6 +208,8 @@ function textoContador(subasta) {
   }
 
   const restante = Math.max(0, fin - ahora);
+  // Urgencia: menos de un minuto para el cierre.
+  const clase = restante > 0 && restante <= 60000 ? "urgente" : "";
   const d = Math.floor(restante / 86400000);
   const h = Math.floor((restante % 86400000) / 3600000);
   const m = Math.floor((restante % 3600000) / 60000);
@@ -176,7 +219,7 @@ function textoContador(subasta) {
   const hh = String(h).padStart(2, "0");
   const mm = String(m).padStart(2, "0");
   const ss = String(s).padStart(2, "0");
-  return { texto: `${dd}:${hh}:${mm}:${ss}`, clase: "" };
+  return { texto: `${dd}:${hh}:${mm}:${ss}`, clase };
 }
 
 function cardSubasta(a, i) {
@@ -209,72 +252,105 @@ function cardSubasta(a, i) {
     </div>`;
 }
 
-const PASO_CATALOGO = 5;
+const PASO_CATALOGO = 5;      // destacadas del index
+const TAMANO_CATALOGO = 12;   // tamaño de página del catálogo (API)
 
 function renderSubastas() {
-  const lista = window.__filtradas.slice(0, window.__visibles);
+  const esCatalogo = window.__modoCatalogo === "completo";
+  const lista = esCatalogo
+    ? window.__filtradas
+    : window.__filtradas.slice(0, window.__visibles);
   const grid = document.getElementById("grid-subastas");
   const vacio = document.getElementById("sin-resultados");
   const cantidad = document.getElementById("cantidad-resultados");
   const verMasWrap = document.getElementById("ver-mas-wrap");
   grid.innerHTML = lista.map((a, i) => cardSubasta(a, i)).join("");
-  vacio.classList.toggle("d-none", window.__filtradas.length > 0);
+  vacio.classList.toggle("d-none", lista.length > 0);
   if (cantidad) {
-    const total = window.__filtradas.length;
     if (window.__modoCatalogo === "destacadas") {
+      const total = lista.length;
       cantidad.textContent = `${total} subasta${total === 1 ? "" : "s"} destacada${total === 1 ? "" : "s"}`;
     } else {
-      cantidad.textContent = `${total} remate${total === 1 ? "" : "s"}${total > PASO_CATALOGO ? ` (mostrando ${Math.min(window.__visibles, total)})` : ""}`;
+      const total = window.__total ?? window.__filtradas.length;
+      cantidad.textContent = `${total} remate${total === 1 ? "" : "s"}${window.__filtradas.length < total ? ` (mostrando ${window.__filtradas.length})` : ""}`;
     }
   }
   if (verMasWrap) {
+    const total = window.__total ?? window.__filtradas.length;
     const inactivo =
-      window.__modoCatalogo === "destacadas" || window.__visibles >= window.__filtradas.length;
+      window.__modoCatalogo === "destacadas" || window.__filtradas.length >= total;
     verMasWrap.classList.toggle("d-none", inactivo);
   }
   iniciarCountdowns(grid);
 }
 
 function mostrarMas() {
-  window.__visibles += PASO_CATALOGO;
-  renderSubastas();
+  ejecutarFiltros((window.__pagina || 1) + 1);
 }
 
+let __debounceTimer = null;
+let __cargando = false;
+let __filtrosPendientes = false;
+
 function aplicarFiltros() {
+  clearTimeout(__debounceTimer);
+  __debounceTimer = setTimeout(() => ejecutarFiltros(1), 300);
+}
+
+async function ejecutarFiltros(pagina) {
+  if (window.__modoCatalogo !== "completo") return;
+  if (__cargando) {
+    __filtrosPendientes = true;
+    return;
+  }
+  __cargando = true;
+
   const estado = document.getElementById("f-condicion").value;
-  const categoria = document.getElementById("f-categoria").value;
-  const min = Number(document.getElementById("f-min").value) || 0;
-  const max = Number(document.getElementById("f-max").value) || Infinity;
+  const categoriaRaw = document.getElementById("f-categoria").value;
+  const min = Number(document.getElementById("f-min").value);
+  const max = Number(document.getElementById("f-max").value);
   const orden = document.getElementById("f-orden").value;
   const buscar = document.getElementById("f-buscar").value.trim().toLowerCase();
 
-  let lista = window.__subastas.filter((a) => {
-    const okEstado = !estado || a.estado === estado;
-    const okCat = !categoria || a.categoria === categoria;
-    const precio = a.ofertaActual ?? a.precioBase;
-    const okPrecio = precio >= min && precio <= max;
-    const okBusqueda =
-      !buscar || a.titulo.toLowerCase().includes(buscar) || (a.categoria ?? "").toLowerCase().includes(buscar);
-    return okEstado && okCat && okPrecio && okBusqueda;
-  });
+  const params = {
+    estado: estado || undefined,
+    categoriaId: categoriaRaw ? Number(categoriaRaw) : undefined,
+    min: min > 0 ? min : undefined,
+    max: Number.isFinite(max) && max > 0 ? max : undefined,
+    orden: orden || undefined,
+    pagina,
+    tamano: TAMANO_CATALOGO,
+  };
 
-  switch (orden) {
-    case "precio-desc":
-      lista.sort((a, b) => (b.ofertaActual ?? 0) - (a.ofertaActual ?? 0));
-      break;
-    case "precio-asc":
-      lista.sort((a, b) => (a.ofertaActual ?? 0) - (b.ofertaActual ?? 0));
-      break;
-    case "final":
-      lista.sort((a, b) => new Date(a.fechaFin) - new Date(b.fechaFin));
-      break;
-    default:
-      lista.sort((a, b) => new Date(b.fechaInicio) - new Date(a.fechaInicio));
+  try {
+    let lista = await fetchSubastas(params);
+
+    // La búsqueda textual no tiene parámetro propio en la API: se resuelve en cliente.
+    if (buscar) {
+      lista = lista.filter(
+        (a) =>
+          a.titulo.toLowerCase().includes(buscar) ||
+          (a.categoria ?? "").toLowerCase().includes(buscar)
+      );
+    }
+
+    if (pagina === 1) {
+      window.__filtradas = lista;
+    } else {
+      // Evita duplicados (por ejemplo, si una respuesta offline repite la lista).
+      const ids = new Set(window.__filtradas.map((s) => String(s.id)));
+      window.__filtradas = window.__filtradas.concat(lista.filter((s) => !ids.has(String(s.id))));
+    }
+    window.__pagina = pagina;
+    window.__total = lista.meta?.total ?? window.__filtradas.length;
+    renderSubastas();
+  } finally {
+    __cargando = false;
+    if (__filtrosPendientes) {
+      __filtrosPendientes = false;
+      ejecutarFiltros(1);
+    }
   }
-
-  window.__filtradas = lista;
-  window.__visibles = PASO_CATALOGO;
-  renderSubastas();
 }
 
 function iniciarCountdowns(contenedor) {
@@ -282,38 +358,53 @@ function iniciarCountdowns(contenedor) {
     if (el.dataset.timer) return;
     el.dataset.timer = "1";
     const card = el.closest(".col[data-id]");
-    const subasta = window.__subastas.find((s) => String(s.id) === card.dataset.id);
+    const origen = window.__filtradas.length ? window.__filtradas : window.__subastas;
+    const subasta = (origen || []).find((s) => String(s.id) === card.dataset.id);
     if (!subasta) return;
 
     const loop = () => {
       const c = textoContador(subasta);
       el.innerHTML = `<i class="bi bi-hourglass-split me-1"></i>${c.texto}`;
-      if (c.clase) el.classList.add("finalizada");
+      el.classList.remove("urgente", "finalizada");
+      if (c.clase) el.classList.add(c.clase);
     };
     loop();
     setInterval(loop, 1000);
   });
 }
 
-function cargarCategorias() {
+async function cargarCategorias() {
   const select = document.getElementById("f-categoria");
   if (!select) return;
-  const categorias = [...new Set(window.__subastas.map((a) => a.categoria).filter(Boolean))];
-  categorias.forEach((c) => {
-    const op = document.createElement("option");
-    op.value = c;
-    op.textContent = c;
-    select.appendChild(op);
-  });
+  try {
+    // Categorías desde la API; el value del select guarda el id (no el nombre).
+    const res = await fetch(`${API_BASE}/categories`);
+    if (!res.ok) throw new Error("sin categorias");
+    const categorias = await res.json();
+    (categorias || []).forEach((c) => {
+      const op = document.createElement("option");
+      op.value = String(c.id);
+      op.textContent = c.name;
+      select.appendChild(op);
+    });
+  } catch {
+    // Fallback offline: categorías deducidas de la lista ya cargada.
+    const nombres = [...new Set((window.__subastas || []).map((a) => a.categoria).filter(Boolean))];
+    nombres.forEach((c) => {
+      const op = document.createElement("option");
+      op.value = c;
+      op.textContent = c;
+      select.appendChild(op);
+    });
+  }
 }
 
 async function initCatalogo() {
-  window.__subastas = await fetchSubastas();
   const esCatalogoCompleto = Boolean(document.getElementById("f-condicion"));
 
   if (esCatalogoCompleto) {
     window.__modoCatalogo = "completo";
-    cargarCategorias();
+    await cargarCategorias();
     aplicarFiltros();
 
     ["f-condicion", "f-categoria", "f-min", "f-max", "f-orden", "f-buscar"].forEach((id) => {
@@ -326,8 +417,10 @@ async function initCatalogo() {
     return;
   }
 
-  // Index: solo 5 destacadas (activas/próximas por orden de cierre).
+  // Index: solo 5 destacadas (activas/próximas por orden de cierre). Sigue
+  // usando fetchSubastas() sin parámetros (array plano, igual que hoy).
   window.__modoCatalogo = "destacadas";
+  window.__subastas = await fetchSubastas();
   const destacadas = window.__subastas
     .filter((a) => a.estado === "ACTIVA" || a.estado === "PROXIMA")
     .sort((a, b) => new Date(a.fechaFin) - new Date(b.fechaFin))

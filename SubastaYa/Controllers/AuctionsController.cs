@@ -35,15 +35,23 @@ namespace SubastaYa.Api.Controllers
         }
 
 
-        /// Lista todas las subastas con oferta actual y cantidad de pujas.
-        /// 200 OK: Devuelve un listado de subastas, cada una con su oferta actual y cantidad de pujas.
-
+        /// Lista el catálogo de subastas con oferta actual, cantidad de pujas y metadata de paginación.
+        /// Filtros opcionales: <c>estado</c> (ACTIVA, PROXIMA, FINALIZADA, DESIERTA), <c>categoriaId</c>,
+        /// <c>minPrecio</c>, <c>maxPrecio</c>; ordenamiento <c>orden</c> (recientes, precio-desc, precio-asc, final)
+        /// y paginación <c>pagina</c>/<c>tamano</c>.
+        /// Sin query string se preserva el contrato original (array plano, listado completo) para el index/catálogo.
+        /// Con parámetros se devuelve el envelope { items, pagina, tamano, total, totalPaginas }.
+        /// 200 OK.
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<AuctionResponseDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll([FromQuery] GetAllAuctionsQuery query)
         {
-            var auctions = await _getAllHandler.Handle(new GetAllAuctionsQuery());
-            return Ok(auctions);
+            var result = await _getAllHandler.Handle(query);
+
+            // Backward-compatible: sin parámetros el index recibe el array plano de siempre.
+            return Request.Query.Count == 0
+                ? Ok(result.Items)
+                : Ok(result);
         }
 
         /// Crea una subasta. Nace ACTIVA si ya empezó o PROXIMA si aún no comenzó.

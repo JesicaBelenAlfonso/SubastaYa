@@ -25,8 +25,7 @@ namespace SubastaYa.Api.Controllers
         [HttpPost("sessions")]
         [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Login(LoginCommand cmd)
-        {
+        public async Task<IActionResult> Login(LoginCommand cmd)        {
             var user = await _loginHandler.Handle(cmd);
 
             return StatusCode(StatusCodes.Status201Created, user);
