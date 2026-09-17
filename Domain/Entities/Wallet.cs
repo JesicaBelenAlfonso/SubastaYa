@@ -13,25 +13,28 @@ namespace SubastaYa.Domain.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
 
-        // Navigation property: permite que EF Core resuelva la FK durante
-        // un SaveChanges único (insert de User + Wallet atómico).
+        // FK resuelta por EF Core en un SaveChanges único.
         public User User { get; set; } = null!;
 
         public decimal TotalBalance { get; set; }
         public decimal HeldBalance { get; set; }
 
-        // Esto asegura que el sistema calcule el saldo
-        // utilizable en tiempo real restando el dinero congelado en garantía
+        // Saldo utilizable = total menos lo congelado en garantía.
         [NotMapped]
         public decimal AvailableBalance => TotalBalance - HeldBalance;
 
-        // Esto le indica a Entity Framework Core y SQL Server que
-        // utilicen este campo para el control de concurrencia optimista
-        // (Optimistic Locking)
+        // Control de concurrencia optimista.
         [Timestamp]
         public byte[] RowVersion { get; set; } = null!;
 
         public Wallet() { }
+
+        public static Wallet CreateFor(User user) => new Wallet
+        {
+            TotalBalance = 0,
+            HeldBalance = 0,
+            User = user
+        };
     }
 
 }

@@ -29,9 +29,31 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
                 .Where(b => b.AuctionId == auctionId)
                 .MaxAsync(b => b.Amount);
         }
+        public async Task<Bid?> GetHighestBidByAuctionIdAsync(int auctionId)
+        {
+            return await _ctx.Bids
+                .Where(b => b.AuctionId == auctionId)
+                .OrderByDescending(b => b.Amount)
+                .ThenByDescending(b => b.BidDate)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<int> GetCountByAuctionIdAsync(int auctionId)
         {
             return await _ctx.Bids.CountAsync(b => b.AuctionId == auctionId);
+        }
+
+        public async Task<IEnumerable<Bid>> GetByAuctionIdAsync(int auctionId)
+        {
+            return await _ctx.Bids
+                .Where(b => b.AuctionId == auctionId)
+                .OrderBy(b => b.BidDate)
+                .ToListAsync();
+        }
+
+        public async Task<bool> HasBidAsync(int auctionId, int buyerId)
+        {
+            return await _ctx.Bids.AnyAsync(b => b.AuctionId == auctionId && b.BuyerId == buyerId);
         }
     }
 }

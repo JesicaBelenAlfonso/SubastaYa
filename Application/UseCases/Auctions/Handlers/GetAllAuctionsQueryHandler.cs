@@ -29,9 +29,13 @@ namespace SubastaYa.Application.UseCases.Auctions.Handlers
             var categories = await _categories.GetAllAsync();
             var categorias = categories.ToDictionary(c => c.Id, c => c.Name);
 
+            var now = DateTime.UtcNow;
             var result = new List<AuctionResponseDto>();
             foreach (var auction in auctions)
             {
+                // Refleja en la respuesta la activación automática sin esperar al worker.
+                auction.RefreshStatus(now);
+
                 var categoria = categorias.TryGetValue(auction.CategoryId, out var name)
                     ? name
                     : null;

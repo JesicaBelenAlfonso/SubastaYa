@@ -49,6 +49,62 @@ body {
 .navbar-subasta .navbar-toggler-icon {
   filter: invert(1);
 }
+.navbar-subasta .nav-link {
+  position: relative;
+  transition: color 0.15s ease;
+}
+.navbar-subasta .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0.15rem;
+  width: 0;
+  height: 2px;
+  background: #d8b25c;
+  transform: translateX(-50%);
+  transition: width 0.2s ease;
+}
+.navbar-subasta .nav-link:hover::after,
+.navbar-subasta .nav-link.active::after {
+  width: 70%;
+}
+.navbar-subasta .nav-link:hover {
+  color: #d8b25c;
+}
+.navbar-subasta .nav-link.active {
+  color: #d8b25c;
+  font-weight: 600;
+}
+.chip-usuario {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--blanco);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ===== Barra de conexión (acceder) ===== */
+.barra-conexion {
+  height: 4px;
+  border-radius: 2px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+.barra-conexion-checking {
+  background-color: #adb5bd;
+}
+.barra-conexion-ok {
+  background-color: #198754;
+}
+.barra-conexion-error {
+  background-color: #dc3545;
+}
 
 /* ===== Hero ===== */
 .hero {
@@ -93,6 +149,15 @@ body {
   font-weight: 700;
   color: var(--verde-oscuro);
 }
+#subastas .seccion-titulo::after {
+  content: "";
+  display: block;
+  width: 3.2rem;
+  height: 3px;
+  margin-top: 0.5rem;
+  border-radius: 2px;
+  background: var(--acento);
+}
 
 /* ===== Filtros ===== */
 .filtros {
@@ -114,6 +179,17 @@ body {
 }
 
 /* ===== Cards de subasta ===== */
+@keyframes subasta-entra {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .card-subasta {
   background-color: var(--blanco);
   border: none;
@@ -121,6 +197,7 @@ body {
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(43, 43, 43, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: subasta-entra 0.4s ease both;
 }
 .card-subasta:hover {
   transform: translateY(-4px);
@@ -303,4 +380,55 @@ body {
 .titulo-panel {
   color: var(--verde-oscuro);
   font-weight: 600;
+}
+
+/* ===== Sala de pujas en vivo ===== */
+.img-wrap-room {
+  height: 340px;
+  overflow: hidden;
+  background-color: var(--crema-oscura);
+}
+.img-wrap-room img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.panel-puja {
+  border: 0;
+  border-radius: 0.9rem;
+  box-shadow: 0 0.25rem 1rem rgba(43, 43, 43, 0.06);
+}
+.oferta-actual-grande {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--verde-oscuro);
+}
+.contador-room {
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+}
+.contador-room.finalizada {
+  color: #fff;
+  background-color: #a03a2e;
+}
+.badge-lider {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.6rem;
+}
+#room-antisniping {
+  font-size: 0.88rem;
+}
+
+/* ===== Botón contorno verde (páginas utilitarias) ===== */
+.btn-contorno-verde {
+  border: 1.5px solid var(--verde);
+  color: var(--verde-oscuro);
+  font-weight: 600;
+}
+.btn-contorno-verde:hover {
+  background-color: var(--verde);
+  color: var(--blanco);
 }

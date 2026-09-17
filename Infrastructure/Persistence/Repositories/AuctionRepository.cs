@@ -28,5 +28,10 @@ namespace SubastaYa.Infrastructure.Persistence.Repositories
 
         public void Delete(Auction auction)
             => _ctx.Auctions.Remove(auction);
+
+        public async Task<IEnumerable<Auction>> GetExpiredActiveAsync(DateTime now)
+            => await _ctx.Auctions
+                .Where(a => a.Status == AuctionStatus.Activa && a.EndDate <= now)
+                .ToListAsync();
     }
 }
