@@ -1,0 +1,4 @@
+﻿Subasta creada: id=6 status=ACTIVA
+Comprador Uno => 201 | Comprador Dos => 409 | pujas en la subasta = 1
+Resultado: OK - 1 confirmada y 1 rechazada (409 por conflicto de concurrencia)
+
