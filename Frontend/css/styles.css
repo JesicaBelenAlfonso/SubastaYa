@@ -262,6 +262,52 @@ body {
   }
 }
 
+/* ===== Sección EN VIVO (index) ===== */
+.punto-en-vivo {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: #dc3545;
+  margin-right: 0.4rem;
+  vertical-align: 0.15em;
+  animation: punto-pulso 1.2s infinite;
+}
+@keyframes punto-pulso {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: #dc3545;
+  color: #fff;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.video-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background-color: #fff;
+  animation: punto-pulso 1.2s infinite;
+}
+.card-en-vivo {
+  box-shadow: 0 8px 24px rgba(220, 53, 69, 0.12);
+}
+.card-en-vivo:hover {
+  box-shadow: 0 14px 32px rgba(220, 53, 69, 0.2);
+}
+
 /* ===== Cómo funciona ===== */
 .paso {
   background-color: var(--blanco);

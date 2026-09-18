@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SubastaYa · Remates Online</title>
 
@@ -26,7 +27,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navPrincipal">
         <ul class="navbar-nav me-auto ms-lg-4 gap-lg-2">
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#subastas">Subastas</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#en-vivo">Subastas</a></li>
           <li class="nav-item"><a class="nav-link" href="#como-funciona">Cómo funciona</a></li>
           <li class="nav-item" data-solo-login><a class="nav-link" href="crear-subasta.html"><i class="bi bi-plus-circle me-1"></i>Crear subasta</a></li>
           <li class="nav-item" data-solo-login><a class="nav-link" href="mis-actividades.html"><i class="bi bi-list-check me-1"></i>Mis actividades</a></li>
@@ -52,7 +53,7 @@
             y hacé tuyo el objeto que buscás.
           </p>
           <div class="d-flex flex-wrap gap-2 mt-4">
-            <a class="btn btn-light btn-lg" href="#subastas">Ver subastas activas</a>
+            <a class="btn btn-light btn-lg" href="#en-vivo">Ver subastas activas</a>
            
           </div>
         </div>
@@ -75,29 +76,45 @@
     </div>
   </header>
 
-  <!-- Subastas destacadas -->
+  <!-- Subastas -->
   <section class="container py-4" id="subastas">
     <div id="aviso-demo" class="alert alert-warning d-none" role="alert">
       <i class="bi bi-info-circle me-1"></i>
       <strong>Modo demo:</strong> la API no está respondiendo y estás viendo un catálogo de ejemplo con las subastas que genera el seeder.
     </div>
 
-    <div class="d-flex align-items-center justify-content-between my-4">
+    <!-- En vivo: todas las subastas activas con su cuenta regresiva en tiempo real -->
+    <div class="d-flex align-items-center justify-content-between my-4" id="en-vivo">
+      <div class="d-flex align-items-center">
+        <h2 class="seccion-titulo h3 mb-0"><span class="punto-en-vivo"></span>En vivo</h2>
+        <span class="badge live-badge ms-2"><span class="video-dot"></span>Tiempo real</span>
+      </div>
+      <span class="text-muted small" id="cantidad-en-vivo"></span>
+    </div>
+    <div id="grid-en-vivo" class="row g-4"></div>
+    <div id="vacio-en-vivo" class="text-center py-5 d-none">
+      <i class="bi bi-broadcast display-4 text-muted"></i>
+      <p class="mt-3 fs-5">No hay subastas en vivo ahora mismo.</p>
+      <p class="text-muted">Las subastas activas aparecen acá con su cuenta regresiva en tiempo real.</p>
+    </div>
+
+    <!-- Próximas a empezar -->
+    <div class="d-flex align-items-center justify-content-between my-4 mt-5">
       <div>
-        <h2 class="seccion-titulo h3 mb-0">Subastas destacadas</h2>
-        <p class="text-muted small mb-0 mt-1"><i class="bi bi-lightning-charge me-1"></i>Los próximos remates por orden de cierre. Mirá el catálogo completo si querés filtrar.</p>
+        <h2 class="seccion-titulo h3 mb-0">Próximas subastas</h2>
+        <p class="text-muted small mb-0 mt-1"><i class="bi bi-lightning-charge me-1"></i>Lo que viene en el calendario. Mirá el catálogo completo si querés ver todas.</p>
       </div>
       <span class="text-muted small" id="cantidad-resultados"></span>
     </div>
     <div id="grid-subastas" class="row g-4"></div>
+    <div id="sin-resultados" class="text-center py-5 d-none">
+      <i class="bi bi-calendar2-week display-4 text-muted"></i>
+      <p class="mt-3 fs-5">Todavía no hay próximas subastas.</p>
+    </div>
     <div class="text-center mt-4">
       <a class="btn btn-contorno-verde btn-lg" href="subastas.html">
         <i class="bi bi-grid-3x3-gap me-1"></i>Ver más subastas
       </a>
-    </div>
-    <div id="sin-resultados" class="text-center py-5 d-none">
-      <i class="bi bi-search display-4 text-muted"></i>
-      <p class="mt-3 fs-5">No hay subastas activas por el momento.</p>
     </div>
   </section>
 
@@ -133,7 +150,7 @@
   </section>
 
   <!-- Footer -->
-  <footer class="footer-subasta py-5" id="contacto">
+  <footer class="footer-subasta mt-5 pt-5 pb-4" id="contacto">
     <div class="container">
       <div class="row g-4">
         <div class="col-lg-4">
@@ -143,10 +160,12 @@
         <div class="col-lg-4">
           <h6 class="text-uppercase mb-3" style="letter-spacing: 0.1em;">Navegación</h6>
           <ul class="list-unstyled small mb-0">
-            <li class="mb-1"><a href="#subastas">Subastas</a></li>
-            <li class="mb-1"><a href="#como-funciona">Cómo funciona</a></li>
-            <li class="mb-1"><a href="acceder.html">Acceder</a></li>
-          </ul>
+            <li class="mb-1"><a href="index.html">Inicio</a></li>
+            <li class="mb-1"><a href="subastas.html">Todas las subastas</a></li>
+            <li class="mb-1"><a href="crear-subasta.html">Crear subasta</a></li>
+            <li class="mb-1"><a href="mis-actividades.html">Mis actividades</a></li>
+            <li class="mb-1"><a href="billetera.html">Mi billetera</a></li>
+                      </ul>
         </div>
         <div class="col-lg-4">
           <h6 class="text-uppercase mb-3" style="letter-spacing: 0.1em;">Contacto</h6>

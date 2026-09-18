@@ -12,14 +12,15 @@ const ESTADOS = {
 function normalizarEstado(estado, inicio, fin) {
   const n = String(estado ?? "").toUpperCase().trim();
   const ahora = new Date();
-  // Badge terminal transitorio: si la API todavía reporta ACTIVA pero el cierre
-  // ya pasó, se muestra FINALIZADA en el cliente. No se toca el seed (el worker
-  // de liquidación resolverá el estado real); solo se elimina la inconsistencia visual.
-  if (n === "ACTIVA" && fin && new Date(fin) <= ahora) return "FINALIZADA";
-  if (ESTADOS[n]) return n;
-  // Fallback: si el backend manda un valor raro (o null), se deduce de las fechas.
+  // Estados terminales reales del backend (su significado ya incluye "terminó").
+  if (n === "FINALIZADA" || n === "DESIERTA") return n;
+  // Si el cierre ya pasó, la subasta terminó (aunque el worker todavía no
+  // actualice el estado en la base). No puede verse "en curso" ni "próxima".
   if (fin && new Date(fin) <= ahora) return "FINALIZADA";
+  // Si todavía no arrancó, es PRÓXIMA.
   if (inicio && new Date(inicio) > ahora) return "PROXIMA";
+  // Estado conocido (ACTIVA/PROXIMA) con fechas coherentes.
+  if (ESTADOS[n]) return n;
   return "ACTIVA";
 }
 
@@ -55,6 +56,8 @@ function mockSubastas() {
     { id: 2, titulo: "Figura de colección edición limitada", descripcion: "Demo sin conexión: comienza mañana.", urlImagen: "https://picsum.photos/seed/figura/600/400", categoria: "Coleccionables", precioBase: 15000, ofertaActual: null, cantidadPujas: 0, fechaInicio: horas(24), fechaFin: dias(3), estado: "PROXIMA" },
     { id: 3, titulo: "Juego de living de roble", descripcion: "Demo sin conexión: finalizada con ganador.", urlImagen: "https://picsum.photos/seed/living/600/400", categoria: "Hogar", precioBase: 50000, ofertaActual: 60000, cantidadPujas: 1, fechaInicio: horas(-120), fechaFin: horas(-1), estado: "FINALIZADA" },
     { id: 4, titulo: "Monitor 27'' 144Hz", descripcion: "Demo sin conexión: desierta, sin pujas.", urlImagen: "https://picsum.photos/seed/monitor/600/400", categoria: "Electrónica", precioBase: 80000, ofertaActual: null, cantidadPujas: 0, fechaInicio: horas(-120), fechaFin: horas(-2), estado: "DESIERTA" },
+    { id: 5, titulo: "Sillones de cuero nórdicos", descripcion: "Demo sin conexión: comienza esta tarde.", urlImagen: "https://picsum.photos/seed/sillones/600/400", categoria: "Hogar", precioBase: 95000, ofertaActual: null, cantidadPujas: 0, fechaInicio: horas(6), fechaFin: horas(14), estado: "PROXIMA" },
+    { id: 6, titulo: "Cámara réflex + lente 50mm", descripcion: "Demo sin conexión: comienza mañana a la tarde.", urlImagen: "https://picsum.photos/seed/camara/600/400", categoria: "Electrónica", precioBase: 220000, ofertaActual: null, cantidadPujas: 0, fechaInicio: horas(30), fechaFin: horas(45), estado: "PROXIMA" },
   ];
 }
 
@@ -231,15 +234,16 @@ function textoContador(subasta) {
   return { texto: `${dd}:${hh}:${mm}:${ss}`, clase };
 }
 
-function cardSubasta(a, i) {
+function cardSubasta(a, i, live) {
   const estado = ESTADOS[a.estado] ?? { label: a.estado, clase: "bg-secondary" };
   const contador = textoContador(a);
   return `
     <div class="col" data-id="${a.id}">
-      <div class="card card-subasta h-100" style="animation-delay:${Math.min(i, 8) * 70}ms">
+      <div class="card card-subasta h-100${live ? " card-en-vivo" : ""}" style="animation-delay:${Math.min(i, 8) * 70}ms">
         <div class="img-wrap position-relative">
           <img src="${a.urlImagen}" alt="${a.titulo}" loading="lazy" />
           <span class="position-absolute top-0 start-0 m-2 badge est-badge ${estado.clase}">${estado.label}</span>
+          ${live ? '<span class="position-absolute top-0 end-0 m-2 badge live-badge"><span class="video-dot"></span>EN VIVO</span>' : ""}
         </div>
         <div class="card-body d-flex flex-column">
           <span class="badge badge-categoria align-self-start mb-2">${a.categoria ?? "General"}</span>
@@ -261,14 +265,11 @@ function cardSubasta(a, i) {
     </div>`;
 }
 
-const PASO_CATALOGO = 5;      // destacadas del index
 const TAMANO_CATALOGO = 12;   // tamaño de página del catálogo (API)
+const NORMALES_INDEX = 3;     // subastas "normales" (próximas) que se ven en el index
 
 function renderSubastas() {
-  const esCatalogo = window.__modoCatalogo === "completo";
-  const lista = esCatalogo
-    ? window.__filtradas
-    : window.__filtradas.slice(0, window.__visibles);
+  const lista = window.__filtradas;
   const grid = document.getElementById("grid-subastas");
   const vacio = document.getElementById("sin-resultados");
   const cantidad = document.getElementById("cantidad-resultados");
@@ -276,19 +277,12 @@ function renderSubastas() {
   grid.innerHTML = lista.map((a, i) => cardSubasta(a, i)).join("");
   vacio.classList.toggle("d-none", lista.length > 0);
   if (cantidad) {
-    if (window.__modoCatalogo === "destacadas") {
-      const total = lista.length;
-      cantidad.textContent = `${total} subasta${total === 1 ? "" : "s"} destacada${total === 1 ? "" : "s"}`;
-    } else {
-      const total = window.__total ?? window.__filtradas.length;
-      cantidad.textContent = `${total} remate${total === 1 ? "" : "s"}${window.__filtradas.length < total ? ` (mostrando ${window.__filtradas.length})` : ""}`;
-    }
+    const total = window.__total ?? window.__filtradas.length;
+    cantidad.textContent = `${total} remate${total === 1 ? "" : "s"}${window.__filtradas.length < total ? ` (mostrando ${window.__filtradas.length})` : ""}`;
   }
   if (verMasWrap) {
     const total = window.__total ?? window.__filtradas.length;
-    const inactivo =
-      window.__modoCatalogo === "destacadas" || window.__filtradas.length >= total;
-    verMasWrap.classList.toggle("d-none", inactivo);
+    verMasWrap.classList.toggle("d-none", window.__filtradas.length >= total);
   }
   iniciarCountdowns(grid);
 }
@@ -367,7 +361,7 @@ function iniciarCountdowns(contenedor) {
     if (el.dataset.timer) return;
     el.dataset.timer = "1";
     const card = el.closest(".col[data-id]");
-    const origen = window.__filtradas.length ? window.__filtradas : window.__subastas;
+    const origen = window.__filtradas && window.__filtradas.length ? window.__filtradas : window.__subastas;
     const subasta = (origen || []).find((s) => String(s.id) === card.dataset.id);
     if (!subasta) return;
 
@@ -408,6 +402,34 @@ async function cargarCategorias() {
   }
 }
 
+function renderIndexHome(vivas, normales) {
+  const gridVivo = document.getElementById("grid-en-vivo");
+  const vacioVivo = document.getElementById("vacio-en-vivo");
+  const cantVivo = document.getElementById("cantidad-en-vivo");
+  const grid = document.getElementById("grid-subastas");
+  const sinResultados = document.getElementById("sin-resultados");
+  const cantidad = document.getElementById("cantidad-resultados");
+
+  if (gridVivo) {
+    gridVivo.innerHTML = vivas.map((a, i) => cardSubasta(a, i, true)).join("");
+    iniciarCountdowns(gridVivo);
+  }
+  if (vacioVivo) vacioVivo.classList.toggle("d-none", vivas.length > 0);
+  if (cantVivo)
+    cantVivo.textContent =
+      vivas.length === 0
+        ? "—"
+        : `${vivas.length} subasta${vivas.length === 1 ? "" : "s"} en vivo`;
+
+  if (grid) {
+    grid.innerHTML = normales.map((a, i) => cardSubasta(a, i, false)).join("");
+    iniciarCountdowns(grid);
+  }
+  if (sinResultados) sinResultados.classList.toggle("d-none", normales.length > 0);
+  if (cantidad)
+    cantidad.textContent = `${normales.length} próxima${normales.length === 1 ? "" : "s"}`;
+}
+
 async function initCatalogo() {
   const esCatalogoCompleto = Boolean(document.getElementById("f-condicion"));
 
@@ -426,17 +448,30 @@ async function initCatalogo() {
     return;
   }
 
-  // Index: solo 5 destacadas (activas/próximas por orden de cierre). Sigue
-  // usando fetchSubastas() sin parámetros (array plano, igual que hoy).
+  // Index: arriba todas las subastas EN VIVO (ACTIVA, por orden de cierre) y
+  // abajo 3 próximas a empezar. El catálogo completo queda en subastas.html.
+  // Sigue usando fetchSubastas() sin parámetros (array plano, igual que hoy).
   window.__modoCatalogo = "destacadas";
   window.__subastas = await fetchSubastas();
-  const destacadas = window.__subastas
-    .filter((a) => a.estado === "ACTIVA" || a.estado === "PROXIMA")
-    .sort((a, b) => new Date(a.fechaFin) - new Date(b.fechaFin))
-    .slice(0, PASO_CATALOGO);
-  window.__filtradas = destacadas;
-  window.__visibles = PASO_CATALOGO;
-  renderSubastas();
+  const ahora = new Date();
+
+  const vivas = window.__subastas
+    .filter((a) => a.estado === "ACTIVA" && new Date(a.fechaFin) > ahora)
+    .sort((a, b) => new Date(a.fechaFin) - new Date(b.fechaFin));
+
+  let normales = window.__subastas
+    .filter((a) => a.estado === "PROXIMA")
+    .sort((a, b) => new Date(a.fechaInicio) - new Date(b.fechaInicio))
+    .slice(0, NORMALES_INDEX);
+  // Si no hay próximas, se muestran las más recientes que no estén en vivo.
+  if (normales.length === 0) {
+    normales = window.__subastas
+      .filter((a) => a.estado !== "ACTIVA" && a.estado !== "DESIERTA")
+      .sort((a, b) => b.id - a.id)
+      .slice(0, NORMALES_INDEX);
+  }
+
+  renderIndexHome(vivas, normales);
 }
 
 function esErrorDeConexion(err) {
