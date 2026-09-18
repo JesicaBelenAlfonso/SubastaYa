@@ -70,8 +70,8 @@
             </select>
           </div>
           <div class="col-12">
-            <label for="cs-descripcion" class="form-label">Descripción</label>
-            <textarea id="cs-descripcion" class="form-control" rows="3" placeholder="Estado del producto, garantías, detalles de la entrega..."></textarea>
+            <label for="cs-descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
+            <textarea id="cs-descripcion" class="form-control" rows="3" required placeholder="Estado del producto, garantías, detalles de la entrega..."></textarea>
           </div>
           <div class="col-md-6">
             <label for="cs-imagen" class="form-label">URL de la imagen</label>
@@ -90,12 +90,15 @@
           <div class="col-md-6">
             <label for="cs-inicio" class="form-label">Fecha y hora de inicio <span class="text-danger">*</span></label>
             <input id="cs-inicio" type="datetime-local" class="form-control" required />
-            <div class="form-text">Si ya pasó, la subasta nace ACTIVA (se puede pujar de inmediato).</div>
+            <div class="form-text">Hora actual: <span id="cs-ahora">—</span>. Si el inicio ya pasó, la subasta nace ACTIVA.</div>
           </div>
           <div class="col-md-6">
             <label for="cs-fin" class="form-label">Fecha y hora de cierre <span class="text-danger">*</span></label>
             <input id="cs-fin" type="datetime-local" class="form-control" required />
             <div class="form-text">Debe ser posterior al inicio.</div>
+          </div>
+          <div class="col-12">
+            <small id="cs-preview" class="text-success fw-semibold">—</small>
           </div>
           <div class="col-12 d-flex flex-wrap gap-2 mt-4">
             <button id="btn-crear" class="btn btn-verde px-4" type="submit">

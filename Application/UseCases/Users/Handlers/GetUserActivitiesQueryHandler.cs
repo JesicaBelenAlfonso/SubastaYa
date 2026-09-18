@@ -80,17 +80,21 @@ namespace SubastaYa.Application.UseCases.Users.Handlers
 
         // GANADA: terminó y el usuario se quedó con la subasta. SUPERADA: terminó y no la ganó.
         // EN_CURSO: todavía no terminó. DESIERTA: terminó sin pujas.
+        // El estado efectivo compensa al worker (que corre cada ~30 s): si la subasta
+        // ya venció pero sigue ACTIVA en la base, se trata como terminada.
         private static string ComputeResultadoPuja(Auction auction, int userId, bool esVendedor, Bid? lider)
         {
+            var vencida = auction.Status == AuctionStatus.Activa && auction.EndDate <= DateTime.UtcNow;
+
             if (auction.Status == AuctionStatus.Desierta)
                 return "DESIERTA";
 
-            if (auction.Status == AuctionStatus.Finalizada)
+            if (auction.Status == AuctionStatus.Finalizada || vencida)
             {
-                var gano = esVendedor
-                    ? lider is not null
-                    : lider is not null && lider.BuyerId == userId;
+                if (lider is null)
+                    return "DESIERTA";
 
+                var gano = esVendedor || lider.BuyerId == userId;
                 return gano ? "GANADA" : "SUPERADA";
             }
 

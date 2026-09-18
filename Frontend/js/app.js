@@ -203,8 +203,17 @@ function textoContador(subasta) {
     return { texto: "Finalizada", clase: "finalizada" };
 
   if (inicio > ahora) {
-    const dias = Math.ceil((inicio - ahora) / 86400000);
-    return { texto: `Comienza en ${dias} día${dias === 1 ? "" : "s"}`, clase: "" };
+    const falta = inicio - ahora;
+    // A partir de 24 hs se muestra en días; si no, cuenta regresiva real.
+    if (falta >= 86400000) {
+      const dias = Math.ceil(falta / 86400000);
+      return { texto: `Comienza en ${dias} día${dias === 1 ? "" : "s"}`, clase: "" };
+    }
+    const fh = Math.floor((falta % 86400000) / 3600000);
+    const fm = Math.floor((falta % 3600000) / 60000);
+    const fs = Math.floor((falta % 60000) / 1000);
+    const f2 = (n) => String(n).padStart(2, "0");
+    return { texto: `Comienza en ${f2(fh)}:${f2(fm)}:${f2(fs)}`, clase: "" };
   }
 
   const restante = Math.max(0, fin - ahora);

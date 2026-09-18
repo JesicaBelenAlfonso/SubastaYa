@@ -99,14 +99,16 @@ namespace SubastaYa.Api.Controllers
             return Ok(bids);
         }
 
-        /// Actualiza los datos de una subasta.
+        /// Actualiza los datos de una subasta (solo si aún no está cerrada ni tiene pujas).
         /// 200 OK: Devuelve la subasta actualizada.
-        /// 400 Bad Request: Datos inválidos (por ejemplo, fin antes del inicio).
+        /// 400 Bad Request: Datos inválidos (fin antes del inicio, precios no positivos, incremento mayor al precio base o categoría inexistente).
         /// 404 Not Found: No existe la subasta.
+        /// 409 Conflict: La subasta está finalizada/desierta o activa con pujas.
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(AuctionResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Update(int id, UpdateAuctionCommand cmd)
         {
             cmd.Id = id;
