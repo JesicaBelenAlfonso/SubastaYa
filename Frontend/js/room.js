@@ -30,6 +30,18 @@
     window.__timerRoom = setTimeout(() => alerta.classList.add("d-none"), 6000);
   }
 
+  function mostrarToast(texto) {
+    const toastEl = document.getElementById("toast-puja");
+    if (!toastEl) return;
+    const cuerpo = document.getElementById("toast-puja-body");
+    if (cuerpo) cuerpo.textContent = texto;
+    clearTimeout(window.__timerToast);
+    window.__timerToast = setTimeout(() => {
+      if (typeof bootstrap !== "undefined") bootstrap.Toast.getOrCreateInstance(toastEl).hide();
+    }, 5000);
+    if (typeof bootstrap !== "undefined") bootstrap.Toast.getOrCreateInstance(toastEl).show();
+  }
+
   const esTerminal = (a) =>
     a.estado === "FINALIZADA" || a.estado === "DESIERTA" || new Date(a.fechaFin) <= new Date();
 
@@ -122,7 +134,8 @@
     contador.dataset.fin = subasta.fechaFin;
     const pront = textoContador(subasta);
     contador.textContent = pront.texto;
-    contador.classList.toggle("finalizada", Boolean(pront.clase));
+    contador.classList.remove("urgente", "finalizada");
+    if (pront.clase) contador.classList.add(pront.clase);
 
     const sug = sugerencia();
     montoEl.min = sug;
@@ -215,7 +228,8 @@
     }
     const c = textoContador(subasta);
     contadorEl.textContent = c.texto;
-    if (c.clase) contadorEl.classList.add("finalizada");
+    contadorEl.classList.remove("urgente", "finalizada");
+    if (c.clase) contadorEl.classList.add(c.clase);
     renderEstadoPersonal();
   }, 1000);
 
@@ -247,8 +261,21 @@
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error ?? "No se pudo registrar la puja.");
       }
+
+      const bid = await res.json().catch(() => null);
       montoEl.value = monto + subasta.minIncremento;
-      mostrarAlerta("Puja registrada. Actualizando la sala...", false);
+
+      // Éxito: toast de confirmación. Si la puja cayó en la ventana anti-sniping
+      // se avisa la extensión del cierre y el nuevo horario.
+      if (bid && bid.seExtendio) {
+        const nuevaFin = new Date(bid.nuevaFechaFin);
+        const fechaOk = !Number.isNaN(nuevaFin.getTime());
+        const hh = fechaOk ? String(nuevaFin.getHours()).padStart(2, "0") : "--";
+        const mm = fechaOk ? String(nuevaFin.getMinutes()).padStart(2, "0") : "--";
+        mostrarToast(`⏰ Tu puja extendió el cierre 2 minutos (nuevo cierre ${hh}:${mm})`);
+      } else {
+        mostrarToast("Puja registrada. Actualizando la sala...");
+      }
       await refrescarSala();
     } catch (err) {
       mostrarAlerta(mensajeDeError(err), true);

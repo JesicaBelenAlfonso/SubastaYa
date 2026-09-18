@@ -53,8 +53,8 @@ Al primer arranque se crean:
 | Usuario | Email | Password | Wallet |
 |---|---|---|---|
 | Vendedor | `vendedor@subastaya.com` | `Password123` | 0 (recibe cobros) |
-| Comprador Uno | `comprador1@subastaya.com` | `Password123` | 200.000 disponible |
-| Comprador Dos | `comprador2@subastaya.com` | `Password123` | 140.000 total / 45.000 retenidos (líder) |
+| Comprador Uno | `comprador1@subastaya.com` | `Password123` | 150.000 total / 45.000 retenidos (líder A1) / 105.000 disponible |
+| Comprador Dos | `comprador2@subastaya.com` | `Password123` | 260.000 total / 60.000 retenidos (ganador A4) / 200.000 disponible |
 | Sin Fondos | `sinfondos@subastaya.com` | `Password123` | 500 (no puede pujar) |
 
 **4 categorías**: Electrónica, Vehículos, Coleccionables, Hogar.
@@ -63,7 +63,7 @@ Al primer arranque se crean:
 
 | Id | Título | Estado | Detalle |
 |---|---|---|---|
-| 1 | Notebook Gamer RTX 16GB | `ACTIVA` | 2 pujas, líder 45.000 (Comprador Dos) |
+| 1 | Notebook Gamer RTX 16GB | `ACTIVA` | 2 pujas, líder 45.000 (Comprador Uno) |
 | 2 | Bicicleta Mountain Bike 29 | `ACTIVA` | Termina en < 2 min (para probar anti-sniping) |
 | 3 | Figura de colección edición limitada | `PROXIMA` | Comienza en +24 h |
 | 4 | Juego de living de roble | `FINALIZADA` | Vencida con ganador: la liquida el worker al arrancar (60.000) |
@@ -199,42 +199,38 @@ curl -X POST http://localhost:5253/api/v1/bids \
 
 ## Demo de concurrencia
 
-Dos pujas simultáneas sobre la misma subasta: **una debe confirmarse (201) y la otra rechazarse (409)**.
-Se logra con el versionado optimista (`RowVersion` en `Auctions` y `Wallets`).
+Dos pujas **simultáneas e idénticas** (mismo monto) sobre la misma subasta: **una se acepta (201) y la otra
+se rechaza (409)**. Se logra con el versionado optimista (`RowVersion` en `Auctions` y `Wallets`).
+
+Ambas peticiones **leen el mismo estado previo** antes de que la otra persista; al guardar hay una sola
+escritura ganadora y la perdedora choca contra la `RowVersion` → `DbUpdateConcurrencyException` → `409`.
+
+Para que la carrera se solape de verdad, el script dispara las dos pujas en el **mismo proceso** con dos
+conexiones HTTP independientes (`HttpClient.PostAsync` + `Task.WaitAll`), **no con `Start-Job`**: cada job de
+PowerShell levanta un proceso nuevo (cientos de ms), las peticiones terminan serializadas y la segunda recibe
+**400 por incremento mínimo** en lugar de 409.
 
 Con la API corriendo:
-
-```powershell
-# crear una subasta activa nueva (fin en 1 hora)
-$now = [DateTime]::UtcNow
-$body = @{
-  categoryId=1; title="Subasta concurrencia"; descripcion="demo";
-  urlImagen="https://picsum.photos/seed/conc/600/400"; basePrice=10000;
-  minIncrement=1000; startDate=$now.AddHours(-1).ToString("o");
-  endDate=$now.AddHours(1).ToString("o"); sellerId=1
-} | ConvertTo-Json
-$a = Invoke-RestMethod -Uri http://localhost:5253/api/v1/auctions -Method Post `
-      -ContentType "application/json" -Body $body
-
-# disparar 2 pujas simultáneas (buyerId 2 y 3)
-$p1 = @{ auctionId=$a.id; amount=12000; buyerId=2 } | ConvertTo-Json
-$p2 = @{ auctionId=$a.id; amount=12000; buyerId=3 } | ConvertTo-Json
-$j1 = Start-Job { param($u,$p) try { Invoke-RestMethod -Uri $u -Method Post -ContentType "application/json" -Body $p } catch { $_.Exception.Response.StatusCode.value__ } } -ArgumentList "http://localhost:5253/api/v1/bids", $p1
-$j2 = Start-Job { param($u,$p) try { Invoke-RestMethod -Uri $u -Method Post -ContentType "application/json" -Body $p } catch { $_.Exception.Response.StatusCode.value__ } } -ArgumentList "http://localhost:5253/api/v1/bids", $p2
-Receive-Job $j1, $j2 -Wait; Remove-Job $j1, $j2 -Force
-```
-
-O directamente con el script incluido para la defensa:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File docs/demo-concurrencia.ps1
 ```
 
+El script captura los **códigos HTTP reales** de cada puja y **verifica en el audit log** que el rechazo fue
+por concurrencia (`BID_REJECTED` con `reason = "Conflicto de concurrencia..."`), descartando un 400 por
+incremento mínimo disfrazado. Si en un intento la carrera no se superpone, reintenta con una subasta nueva
+(hasta 5 intentos). Termina con código de salida distinto de 0 solo si no logra un 201 y un 409 genuinos.
+
 Resultado esperado:
 
 ```
-buyer1=201 buyer2=409 | pujas en la subasta = 1  ->  1 confirmada + 1 rechazada: OK
+Intento 1 (subasta id=11): Comprador Uno(2) => 409 | Comprador Dos(3) => 201 | pujas=1
+Body del 409: {"error":"El recurso fue modificado por otro proceso. Reintentá la operación."}
+Auditoria del rechazo: action=BID_REJECTED | detail={"auctionId":11,"amount":12000,"minimum":12000.00,"auctionStatus":"ACTIVA","reason":"Conflicto de concurrencia al registrar la puja"}
+Resultado: OK - 1 confirmada (201) y 1 rechazada (409 por conflicto de concurrencia)
 ```
+
+La corrida de referencia queda documentada en `docs/evidencia-concurrencia.txt`.
 
 ## Prueba rápida de anti-sniping (59 s / 61 s / 0 s)
 

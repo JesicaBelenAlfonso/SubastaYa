@@ -1,0 +1,4 @@
+﻿Intento 1 (subasta id=11): Comprador Uno(2) => 409 | Comprador Dos(3) => 201 | pujas=1
+Body del 409: {"error":"El recurso fue modificado por otro proceso. Reintentá la operación."}
+Auditoria del rechazo: action=BID_REJECTED | detail={"auctionId":11,"amount":12000,"minimum":12000.00,"auctionStatus":"ACTIVA","reason":"Conflicto de concurrencia al registrar la puja"}
+Resultado: OK - 1 confirmada (201) y 1 rechazada (409 por conflicto de concurrencia)

@@ -143,7 +143,7 @@ namespace SubastaYa.Application.UseCases.Bids.Handlers
             });
 
             // 3) Anti-sniping: extiende el fin si la puja entra en la ventana crítica.
-            await ApplyAntiSniping(auction, cmd.BuyerId, remaining);
+            var extension = await ApplyAntiSniping(auction, cmd.BuyerId, remaining);
 
             // Toca la subasta en cada puja (marca de actividad + RowVersion).
             auction.LastBidAt = now;
@@ -170,16 +170,24 @@ namespace SubastaYa.Application.UseCases.Bids.Handlers
                 throw;
             }
 
-            return bid.ToDto();
+            var response = bid.ToDto();
+            if (extension is not null)
+            {
+                response.SeExtendio = true;
+                response.NuevaFechaFin = auction.EndDate;
+            }
+
+            return response;
         }
 
-        private async Task ApplyAntiSniping(Auction auction, int bidderId, TimeSpan remaining)
+        private async Task<TimeSpan?> ApplyAntiSniping(Auction auction, int bidderId, TimeSpan remaining)
         {
             var window = TimeSpan.FromSeconds(_options.AntiSnipingWindowSeconds);
             if (remaining > TimeSpan.Zero && remaining <= window)
             {
                 var previousEnd = auction.EndDate;
-                auction.EndDate = previousEnd.AddMinutes(_options.AntiSnipingExtensionMinutes);
+                var delta = TimeSpan.FromMinutes(_options.AntiSnipingExtensionMinutes);
+                auction.EndDate = previousEnd + delta;
 
                 await _audit.LogAsync("Auction", auction.Id, AuditAction.AUCTION_TIME_EXTENDED, bidderId, new
                 {
@@ -188,7 +196,11 @@ namespace SubastaYa.Application.UseCases.Bids.Handlers
                     newEnd = auction.EndDate,
                     extendedByMinutes = _options.AntiSnipingExtensionMinutes
                 });
+
+                return delta;
             }
+
+            return null;
         }
 
         private async Task RejectAsync(CreateBidCommand cmd, Auction? auction, int auctionId, string reason)
